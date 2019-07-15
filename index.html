@@ -1,0 +1,68 @@
+<!DOCTYPE html> 
+	<html lang="pt-br">
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", (event) => {
+			let editableNote = {
+				element: document.getElementById("editable-note"),
+				paragraph: 0
+			}
+			editableNote.initialize = function () {
+				this.element.contentEditable = "true";
+				this.element.addEventListener('keydown', this.onChangeText, false);
+				this.element.addEventListener('mouseup', this.onSelectText, false);
+				this.setSize(400, 200);
+				this.insertParagraph();
+			}
+			editableNote.onSelectText = function (event) {
+				console.log( window.getSelection() );
+			}
+			editableNote.onChangeText = function (event) {
+				if(event.keyCode == 8 || event.keyCode ==  46) 
+					if(this.textContent.length == 0) 
+						if(this.childNodes.length <= 1)
+							event.preventDefault();
+			}
+			editableNote.insertParagraph = function () {
+				this.insertNode('p','class','paragraph');
+			}
+			editableNote.insertNode = function (elementType, attributeName = '', attributeValue = '') {
+				let node = document.createElement(elementType);
+				let attr = document.createAttribute(attributeName);
+				attr.value = attributeValue;
+				node.setAttributeNode(attr);  
+				this.element.appendChild(node);
+			}
+			editableNote.setSize = function (width, height) {
+				this.element.style.width = width+"px";
+				this.element.style.height = height+"px";
+			}
+			editableNote.initialize();
+		});
+	</script>
+	<style>
+		body {
+			background-color: grey;
+		}
+		#editable-note {
+			word-wrap: break-word;
+    		overflow-wrap: break-word;
+   			white-space: normal;
+			min-width: 400px;
+			min-height: 200px;
+			overflow: hidden;
+			background-color: white;
+		}
+		#editable-note > p {
+			width: 100%;
+			min-height: 20px;
+			margin: 0;
+		}
+	</style>
+	<head>
+		<meta charset="utf-8">
+		<title>Editable Note</title> 
+	</head> 
+	<body> 
+		<div id="editable-note"></div>
+	</body>
+</hmtl>
