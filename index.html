@@ -1,40 +1,105 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 	<html lang="pt-br">
 	<script type="text/javascript">
 		document.addEventListener("DOMContentLoaded", (event) => {
 			let editableNote = {
 				element: document.getElementById("editable-note"),
+				container: null,
 				paragraph: 0
 			}
 			editableNote.initialize = function () {
+				this.insertContainer();
 				this.element.contentEditable = "true";
 				this.element.addEventListener('keydown', this.onChangeText, false);
-				this.element.addEventListener('mouseup', this.onSelectText, false);
-				this.setSize(400, 200);
+				this.setStyle(400, 200);
+				this.insertButton('bold');
+				this.insertButton('underline');
+				this.insertButton('italic');
+				this.insertButton('font');
 				this.insertParagraph();
 			}
-			editableNote.onSelectText = function (event) {
+			/*editableNote.onSelectText = function (event) {
 				console.log( window.getSelection() );
-			}
+			}*/
 			editableNote.onChangeText = function (event) {
-				if(event.keyCode == 8 || event.keyCode ==  46) 
-					if(this.textContent.length == 0) 
+				if(event.keyCode == 8 || event.keyCode ==  46)
+					if(this.textContent.length == 0)
 						if(this.childNodes.length <= 1)
 							event.preventDefault();
 			}
 			editableNote.insertParagraph = function () {
 				this.insertNode('p','class','paragraph');
 			}
+			editableNote.insertContainer = function () {
+				let parent = this.element.parentNode;
+				let wrapper = document.createElement('div');
+				let attr = document.createAttribute('id');
+				attr.value = 'editable-note-container';
+				wrapper.setAttributeNode(attr);
+				parent.replaceChild(wrapper, this.element);
+				wrapper.appendChild(this.element);
+				this.container = document.getElementById("editable-note-container");
+			}
+			editableNote.setEventFontSize = function () {
+				/*let node = document.createElement('input');
+				let attrs = {
+					"class": "editable-note-font-size", 
+					"type": "number",
+					"min": 6,
+					"max": 50,
+					"value": 6
+				};
+				setAttributes(node, attrs);
+				this.container.insertBefore(node, this.element);*/
+			}
 			editableNote.insertNode = function (elementType, attributeName = '', attributeValue = '') {
 				let node = document.createElement(elementType);
 				let attr = document.createAttribute(attributeName);
 				attr.value = attributeValue;
-				node.setAttributeNode(attr);  
+				node.setAttributeNode(attr);
 				this.element.appendChild(node);
 			}
-			editableNote.setSize = function (width, height) {
+			editableNote.insertButton = function (elementType) {
+				let node = document.createElement('button');
+				let attr = document.createAttribute('class');
+				attr.value = 'editable-note-button fa fa-'+elementType;
+				node.setAttributeNode(attr);
+				switch (elementType) {
+					case 'underline':
+						node.addEventListener('click', this.setEventType, false);
+						node.eventType = 'underline';
+						this.container.insertBefore(node, this.element);
+						break;
+					case 'bold':
+						node.addEventListener('click', this.setEventType, false);
+						node.eventType = 'bold';
+						this.container.insertBefore(node, this.element);
+						break;
+					case 'italic':
+						node.addEventListener('click', this.setEventType, false);
+						node.eventType = 'italic';
+						this.container.insertBefore(node, this.element);
+						break;
+					case 'font':
+						node.addEventListener('click', this.setEventFontSize, false);
+						this.container.insertBefore(node, this.element);
+						break;
+				}
+			}
+			editableNote.setStyle = function (width, height) {
 				this.element.style.width = width+"px";
 				this.element.style.height = height+"px";
+				this.element.style.padding = 5+"px";
+				this.element.style.marginTop = 5+"px";
+			}
+			editableNote.setEventType = function (event) {
+				console.log(event.target.eventType);
+				document.execCommand(event.target.eventType);
+			}
+			function setAttributes(el, attrs) {
+			  for(var key in attrs) {
+			    el.setAttribute(key, attrs[key]);
+			  }
 			}
 			editableNote.initialize();
 		});
@@ -60,9 +125,10 @@
 	</style>
 	<head>
 		<meta charset="utf-8">
-		<title>Editable Note</title> 
-	</head> 
-	<body> 
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<title>Editable Note</title>
+	</head>
+	<body>
 		<div id="editable-note"></div>
 	</body>
 </hmtl>
