@@ -69,7 +69,6 @@
 						node.setAttributeNode(attr);
 						node.addEventListener('click', this.setEventType, false);
 						node.eventType = 'underline';
-						this.container.insertBefore(node, this.element);
 						break;
 					case 'bold':
 						attr = document.createAttribute('class');
@@ -77,7 +76,6 @@
 						node.setAttributeNode(attr);
 						node.addEventListener('click', this.setEventType, false);
 						node.eventType = 'bold';
-						this.container.insertBefore(node, this.element);
 						break;
 					case 'italic':
 						attr = document.createAttribute('class');
@@ -85,7 +83,6 @@
 						node.setAttributeNode(attr);
 						node.addEventListener('click', this.setEventType, false);
 						node.eventType = 'italic';
-						this.container.insertBefore(node, this.element);
 						break;
 					case 'font-color':
 						attr = document.createAttribute('class');
@@ -111,9 +108,9 @@
 						labelColor.appendChild(inputColor);
 
 						node.appendChild(labelColor);
-						this.container.insertBefore(node, this.element);
 						break;
 				}
+				this.container.insertBefore(node, this.element);
 			}
 			editableNote.setStyle = function (width, height) {
 				this.element.style.width = width[length-1] == '%' ? (width+'%') : (width+'px');
