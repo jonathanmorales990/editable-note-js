@@ -5,17 +5,25 @@
 			let editableNote = {
 				element: document.getElementById('editable-note'),
 				container: null,
-				paragraph: 0
+				paragraph: 0,
+				toolbar: [
+					'bold',
+					'underline',
+					'italic',
+					'font-size',
+					'font-color',
+					'background-font-color'
+				],
+				fontSizes: ['8','9','10','11','12','14','18','24','30','36','40','48']
 			}
 			editableNote.initialize = function () {
 				this.insertContainer();
 				this.element.contentEditable = 'true';
 				this.element.addEventListener('keydown', this.onChangeText, false);
 				this.setStyle(400, 200);
-				this.insertButton('bold');
-				this.insertButton('underline');
-				this.insertButton('italic');
-				this.insertButton('font-color');
+				for(let key in this.toolbar) {
+			    	this.insertButton(this.toolbar[key]);
+			  	}
 				this.insertParagraph();
 			}
 			/*editableNote.onSelectText = function (event) {
@@ -61,7 +69,13 @@
 			}
 			editableNote.insertButton = function (elementType) {
 				let node = document.createElement('button');
+				let label = document.createElement('label');
+				let input = document.createElement('input');
+				let icon = document.createElement('i');
+				let dropdown = document.createElement('div');
+				let fontSizeList = document.createElement('span');
 				let attr;
+
 				switch (elementType) {
 					case 'underline':
 						attr = document.createAttribute('class');
@@ -84,30 +98,68 @@
 						node.addEventListener('click', this.setEventType, false);
 						node.eventType = 'italic';
 						break;
-					case 'font-color':
+					case 'font-size':
 						attr = document.createAttribute('class');
-						attr.value = 'editable-note-button';
+						attr.value = 'editable-note-button fa';
 						node.setAttributeNode(attr);
-
-						let labelColor = document.createElement('label');
-						let inputColor = document.createElement('input');
-						let icon = document.createElement('i');
-
-						labelColor.style.width = '100%';
-						labelColor.style.height = '100%';
-						inputColor.style.display = 'none';
+						label.style.width = '100%';
+						label.style.height = '100%';
+						label.style.position = 'relative';
 						attr = document.createAttribute('class');
 						attr.value = 'fa fa-font';
 						icon.setAttributeNode(attr);
-						
+						label.appendChild(icon);
+						iconClone = icon.cloneNode(true);
+						iconClone.style.fontSize = '12px';
+						attr = document.createAttribute('class');
+						attr.value = 'dropdown-font-size';
+						dropdown.setAttributeNode(attr);
+						for(let key in this.fontSizes) {
+							fontSizeList.textContent = this.fontSizes[key];
+							dropdown.appendChild(fontSizeList.cloneNode(true));
+						}
+						label.appendChild(dropdown);
+						label.appendChild(iconClone);
+						node.appendChild(label);
+						break;
+					case 'font-color':
+						attr = document.createAttribute('class');
+						attr.value = 'editable-note-button fa';
+						node.setAttributeNode(attr);
+						label.style.width = '100%';
+						label.style.height = '100%';
+						input.style.display = 'none';
+						attr = document.createAttribute('class');
+						attr.value = 'fa fa-font';
+						icon.setAttributeNode(attr);
 						attr = document.createAttribute('type');
 						attr.value = 'color';
-						inputColor.setAttributeNode(attr);
-						
-						labelColor.appendChild(icon);
-						labelColor.appendChild(inputColor);
-
-						node.appendChild(labelColor);
+						input.setAttributeNode(attr);
+						label.appendChild(icon);
+						label.appendChild(input);
+						node.appendChild(label);
+						input.addEventListener('change', this.setEventType, false);
+						input.eventType = 'foreColor';
+						break;
+					case 'background-font-color':
+						attr = document.createAttribute('class');
+						attr.value = 'editable-note-button fa';
+						node.setAttributeNode(attr);
+						label.style.width = '100%';
+						label.style.height = '100%';
+						label.style.backgroundColor = 'white';
+						input.style.display = 'none';
+						attr = document.createAttribute('class');
+						attr.value = 'fa fa-font';
+						icon.setAttributeNode(attr);
+						attr = document.createAttribute('type');
+						attr.value = 'color';
+						input.setAttributeNode(attr);
+						label.appendChild(icon);
+						label.appendChild(input);
+						node.appendChild(label);
+						input.addEventListener('change', this.setEventType, false);
+						input.eventType = 'hiliteColor';
 						break;
 				}
 				this.container.insertBefore(node, this.element);
@@ -119,8 +171,9 @@
 				this.element.style.marginTop = 5+"px";
 			}
 			editableNote.setEventType = function (event) {
-				console.log(event.target.eventType);
-				document.execCommand(event.target.eventType);
+				event.target.eventType == 'foreColor' || event.target.eventType == 'hiliteColor' ?
+					document.execCommand(event.target.eventType, false, event.target.value) :
+					document.execCommand(event.target.eventType)
 			}
 			function setAttributes(el, attrs) {
 			  for(var key in attrs) {
@@ -133,6 +186,18 @@
 	<style>
 		body {
 			background-color: grey;
+		}
+		.dropdown-font-size {
+			width: 50px;
+			height: 100px;
+			position: absolute;
+			top: 20px;
+			border-bottom-left-radius: 3px;
+			border-top-left-radius: 3px;
+			left: -5px;
+			box-shadow: 1px 1px 4px -1px black;
+			background-color: white;
+			overflow-y: scroll;
 		}
 		#editable-note {
 			word-wrap: break-word;
