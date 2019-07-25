@@ -3,19 +3,19 @@
 	<script type="text/javascript">
 		document.addEventListener("DOMContentLoaded", (event) => {
 			let editableNote = {
-				element: document.getElementById("editable-note"),
+				element: document.getElementById('editable-note'),
 				container: null,
 				paragraph: 0
 			}
 			editableNote.initialize = function () {
 				this.insertContainer();
-				this.element.contentEditable = "true";
+				this.element.contentEditable = 'true';
 				this.element.addEventListener('keydown', this.onChangeText, false);
 				this.setStyle(400, 200);
 				this.insertButton('bold');
 				this.insertButton('underline');
 				this.insertButton('italic');
-				this.insertButton('font');
+				this.insertButton('font-color');
 				this.insertParagraph();
 			}
 			/*editableNote.onSelectText = function (event) {
@@ -38,7 +38,7 @@
 				wrapper.setAttributeNode(attr);
 				parent.replaceChild(wrapper, this.element);
 				wrapper.appendChild(this.element);
-				this.container = document.getElementById("editable-note-container");
+				this.container = document.getElementById('editable-note-container');
 			}
 			editableNote.setEventFontSize = function () {
 				/*let node = document.createElement('input');
@@ -61,34 +61,63 @@
 			}
 			editableNote.insertButton = function (elementType) {
 				let node = document.createElement('button');
-				let attr = document.createAttribute('class');
-				attr.value = 'editable-note-button fa fa-'+elementType;
-				node.setAttributeNode(attr);
+				let attr;
 				switch (elementType) {
 					case 'underline':
+						attr = document.createAttribute('class');
+						attr.value = 'editable-note-button fa fa-'+elementType;
+						node.setAttributeNode(attr);
 						node.addEventListener('click', this.setEventType, false);
 						node.eventType = 'underline';
 						this.container.insertBefore(node, this.element);
 						break;
 					case 'bold':
+						attr = document.createAttribute('class');
+						attr.value = 'editable-note-button fa fa-'+elementType;
+						node.setAttributeNode(attr);
 						node.addEventListener('click', this.setEventType, false);
 						node.eventType = 'bold';
 						this.container.insertBefore(node, this.element);
 						break;
 					case 'italic':
+						attr = document.createAttribute('class');
+						attr.value = 'editable-note-button fa fa-'+elementType;
+						node.setAttributeNode(attr);
 						node.addEventListener('click', this.setEventType, false);
 						node.eventType = 'italic';
 						this.container.insertBefore(node, this.element);
 						break;
-					case 'font':
-						node.addEventListener('click', this.setEventFontSize, false);
+					case 'font-color':
+						attr = document.createAttribute('class');
+						attr.value = 'editable-note-button';
+						node.setAttributeNode(attr);
+
+						let labelColor = document.createElement('label');
+						let inputColor = document.createElement('input');
+						let icon = document.createElement('i');
+
+						labelColor.style.width = '100%';
+						labelColor.style.height = '100%';
+						inputColor.style.display = 'none';
+						attr = document.createAttribute('class');
+						attr.value = 'fa fa-font';
+						icon.setAttributeNode(attr);
+						
+						attr = document.createAttribute('type');
+						attr.value = 'color';
+						inputColor.setAttributeNode(attr);
+						
+						labelColor.appendChild(icon);
+						labelColor.appendChild(inputColor);
+
+						node.appendChild(labelColor);
 						this.container.insertBefore(node, this.element);
 						break;
 				}
 			}
 			editableNote.setStyle = function (width, height) {
-				this.element.style.width = width+"px";
-				this.element.style.height = height+"px";
+				this.element.style.width = width[length-1] == '%' ? (width+'%') : (width+'px');
+				this.element.style.height = height[length-1] == '%' ? (height+'%') : (height+'px');
 				this.element.style.padding = 5+"px";
 				this.element.style.marginTop = 5+"px";
 			}
@@ -129,6 +158,10 @@
 		<title>Editable Note</title>
 	</head>
 	<body>
+		<label for="file-upload" class="custom-file-upload">
+		    <i class="fa fa-cloud-upload"></i>
+		</label>
+		<input id="file-upload" type="file"/>
 		<div id="editable-note"></div>
 	</body>
 </hmtl>
