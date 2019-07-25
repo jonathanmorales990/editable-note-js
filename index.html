@@ -121,6 +121,7 @@
 						label.appendChild(dropdown);
 						label.appendChild(iconClone);
 						node.appendChild(label);
+						node.addEventListener('click', this.onClickButtonFontSize, false);
 						break;
 					case 'font-color':
 						attr = document.createAttribute('class');
@@ -175,6 +176,9 @@
 					document.execCommand(event.target.eventType, false, event.target.value) :
 					document.execCommand(event.target.eventType)
 			}
+			editableNote.onClickButtonFontSize = function (event) {
+				console.log(event);
+			}
 			function setAttributes(el, attrs) {
 			  for(var key in attrs) {
 			    el.setAttribute(key, attrs[key]);
@@ -192,12 +196,19 @@
 			height: 100px;
 			position: absolute;
 			top: 20px;
+			display: none;
 			border-bottom-left-radius: 3px;
 			border-top-left-radius: 3px;
 			left: -5px;
 			box-shadow: 1px 1px 4px -1px black;
 			background-color: white;
 			overflow-y: scroll;
+		}
+		.dropdown-font-size .open {
+			display: block;
+		}
+		.dropdown-font-size > span {
+			display: block;
 		}
 		#editable-note {
 			word-wrap: break-word;
