@@ -14,7 +14,7 @@
 					'font-color',
 					'background-font-color'
 				],
-				fontSizes: ['8','9','10','11','12','14','18','24','30','36','40','48']
+				fontSizes: ['8','9','10','11','12','14','16','18','24','30','36','40','48']
 			}
 			editableNote.initialize = function () {
 				this.insertContainer();
@@ -48,24 +48,21 @@
 				wrapper.appendChild(this.element);
 				this.container = document.getElementById('editable-note-container');
 			}
-			editableNote.setEventFontSize = function () {
-				/*let node = document.createElement('input');
-				let attrs = {
-					"class": "editable-note-font-size", 
-					"type": "number",
-					"min": 6,
-					"max": 50,
-					"value": 6
-				};
-				setAttributes(node, attrs);
-				this.container.insertBefore(node, this.element);*/
-			}
 			editableNote.insertNode = function (elementType, attributeName = '', attributeValue = '') {
 				let node = document.createElement(elementType);
 				let attr = document.createAttribute(attributeName);
 				attr.value = attributeValue;
 				node.setAttributeNode(attr);
 				this.element.appendChild(node);
+			}
+			editableNote.setEventFontSize = function (event) {
+				document.getElementsByClassName('paragraph')[0].focus();
+				console.log(document.getElementsByClassName('paragraph')[0]);
+				let node = document.createElement('span');
+				node.textContent = window.getSelection(); 
+				node.style.fontSize = event.target.textContent+'px';
+    			pasteHtmlAtCaret(node.outerHTML, true)
+				event.stopPropagation();
 			}
 			editableNote.insertButton = function (elementType) {
 				let node = document.createElement('button');
@@ -121,7 +118,9 @@
 						label.appendChild(dropdown);
 						label.appendChild(iconClone);
 						node.appendChild(label);
-						node.addEventListener('click', this.onClickButtonFontSize, false);
+						dropdown.addEventListener('click', this.setEventFontSize, false);
+						node.addEventListener('click', this.toggleDropdown, false);
+						node.addEventListener('focusout', this.focusOutDropdown, false);
 						break;
 					case 'font-color':
 						attr = document.createAttribute('class');
@@ -176,13 +175,63 @@
 					document.execCommand(event.target.eventType, false, event.target.value) :
 					document.execCommand(event.target.eventType)
 			}
-			editableNote.onClickButtonFontSize = function (event) {
-				console.log(event);
+			editableNote.toggleDropdown = function () {
+				let el = document.getElementsByClassName('dropdown-font-size');
+				el[0].classList[1] ? 
+					setAttributes(el[0], {'class': 'dropdown-font-size'}) : setAttributes(el[0], {'class': 'dropdown-font-size open'})
+			}
+			editableNote.focusOutDropdown = function () {
+				let el = document.getElementsByClassName('dropdown-font-size');
+				setAttributes(el[0], {'class': 'dropdown-font-size'})
 			}
 			function setAttributes(el, attrs) {
-			  for(var key in attrs) {
-			    el.setAttribute(key, attrs[key]);
-			  }
+				for(let key in attrs) {
+					el.setAttribute(key, attrs[key]);
+				}
+			}
+			function pasteHtmlAtCaret(html, selectPastedContent) {
+			    let sel, range;
+			    if (window.getSelection) {
+			        // IE9 and non-IE
+			        sel = window.getSelection();
+			        if (sel.getRangeAt && sel.rangeCount) {
+			            range = sel.getRangeAt(0);
+			            range.deleteContents();
+			            // Range.createContextualFragment() would be useful here but is
+			            // only relatively recently standardized and is not supported in
+			            // some browsers (IE9, for one)
+			            let el = document.createElement("div");
+			            el.innerHTML = html;
+			            let frag = document.createDocumentFragment(), node, lastNode;
+			            while ( (node = el.firstChild) ) {
+			                lastNode = frag.appendChild(node);
+			            }
+			            let firstNode = frag.firstChild;
+			            range.insertNode(frag);        
+			            // Preserve the selection
+			            if (lastNode) {
+			                range = range.cloneRange();
+			                range.setStartAfter(lastNode);
+			                if (selectPastedContent) {
+			                    range.setStartBefore(firstNode);
+			                } else {
+			                    range.collapse(true);
+			                }
+			                sel.removeAllRanges();
+			                sel.addRange(range);
+			            }
+			        }
+			    } else if ( (sel = document.selection) && sel.type != "Control") {
+			        // IE < 9
+			        let originalRange = sel.createRange();
+			        originalRange.collapse(true);
+			        sel.createRange().pasteHTML(html);
+			        if (selectPastedContent) {
+			            range = sel.createRange();
+			            range.setEndPoint("StartToStart", originalRange);
+			            range.select();
+			        }
+			    }
 			}
 			editableNote.initialize();
 		});
@@ -204,7 +253,7 @@
 			background-color: white;
 			overflow-y: scroll;
 		}
-		.dropdown-font-size .open {
+		.dropdown-font-size.open {
 			display: block;
 		}
 		.dropdown-font-size > span {
@@ -212,7 +261,7 @@
 		}
 		#editable-note {
 			word-wrap: break-word;
-    		overflow-wrap: break-word;
+			overflow-wrap: break-word;
    			white-space: normal;
 			min-width: 400px;
 			min-height: 200px;
@@ -232,5 +281,6 @@
 	</head>
 	<body>
 		<div id="editable-note"></div>
+		<div contenteditable="true">s</div>
 	</body>
 </hmtl>
