@@ -56,12 +56,14 @@
 				this.element.appendChild(node);
 			}
 			editableNote.setEventFontSize = function (event) {
-				document.getElementsByClassName('paragraph')[0].focus();
-				console.log(document.getElementsByClassName('paragraph')[0]);
-				let node = document.createElement('span');
-				node.textContent = window.getSelection(); 
-				node.style.fontSize = event.target.textContent+'px';
-    			pasteHtmlAtCaret(node.outerHTML, true)
+    			document.execCommand("fontSize", false, "7");
+			    var fontElements = document.getElementsByTagName("font");
+			    for (var i = 0, len = fontElements.length; i < len; ++i) {
+			        if (fontElements[i].size == "7") {
+			            fontElements[i].removeAttribute("size");
+			            fontElements[i].style.fontSize = event.target.textContent+'px';
+			        }
+			    }
 				event.stopPropagation();
 			}
 			editableNote.insertButton = function (elementType) {
@@ -232,6 +234,24 @@
 			            range.select();
 			        }
 			    }
+			}
+			function getSelectionHtml() {
+			    var html = "";
+			    if (typeof window.getSelection != "undefined") {
+			        var sel = window.getSelection();
+			        if (sel.rangeCount) {
+			            var container = document.createElement("div");
+			            for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+			                container.appendChild(sel.getRangeAt(i).cloneContents());
+			            }
+			            html = container.innerHTML;
+			        }
+			    } else if (typeof document.selection != "undefined") {
+			        if (document.selection.type == "Text") {
+			            html = document.selection.createRange().htmlText;
+			        }
+			    }
+			    return html;
 			}
 			editableNote.initialize();
 		});
