@@ -2,7 +2,7 @@
 	<html lang="pt-br">
 	<script type="text/javascript">
 		document.addEventListener("DOMContentLoaded", (event) => {
-			let editableNote = {
+			var editableNote = {
 				element: document.getElementById('editable-note'),
 				container: null,
 				paragraph: 0,
@@ -12,7 +12,11 @@
 					'italic',
 					'font-size',
 					'font-color',
-					'background-font-color'
+					'background-font-color',
+					'align-justify',
+					'align-left',
+					'align-center',
+					'align-right'
 				],
 				fontSizes: ['8','9','10','11','12','14','16','18','24','30','36','40','48']
 			}
@@ -20,15 +24,12 @@
 				this.insertContainer();
 				this.element.contentEditable = 'true';
 				this.element.addEventListener('keydown', this.onChangeText, false);
-				this.setStyle(400, 200);
-				for(let key in this.toolbar) {
+				this.setSize(900, 200);
+				for(var key in this.toolbar) {
 			    	this.insertButton(this.toolbar[key]);
 			  	}
 				this.insertParagraph();
 			}
-			/*editableNote.onSelectText = function (event) {
-				console.log( window.getSelection() );
-			}*/
 			editableNote.onChangeText = function (event) {
 				if(event.keyCode == 8 || event.keyCode ==  46)
 					if(this.textContent.length == 0)
@@ -39,9 +40,9 @@
 				this.insertNode('p','class','paragraph');
 			}
 			editableNote.insertContainer = function () {
-				let parent = this.element.parentNode;
-				let wrapper = document.createElement('div');
-				let attr = document.createAttribute('id');
+				var parent = this.element.parentNode;
+				var wrapper = document.createElement('div');
+				var attr = document.createAttribute('id');
 				attr.value = 'editable-note-container';
 				wrapper.setAttributeNode(attr);
 				parent.replaceChild(wrapper, this.element);
@@ -49,8 +50,8 @@
 				this.container = document.getElementById('editable-note-container');
 			}
 			editableNote.insertNode = function (elementType, attributeName = '', attributeValue = '') {
-				let node = document.createElement(elementType);
-				let attr = document.createAttribute(attributeName);
+				var node = document.createElement(elementType);
+				var attr = document.createAttribute(attributeName);
 				attr.value = attributeValue;
 				node.setAttributeNode(attr);
 				this.element.appendChild(node);
@@ -59,24 +60,24 @@
 				/*document.execCommand('formatblock', false, 'p');
 				var listId = window.getSelection().focusNode.parentNode;
 				$(listId).addClass("oder2");*/
-    			document.execCommand("fontSize", false, "7");
-			    var fontElements = document.getElementsByTagName("font");
+				execCommandOnElement(editableNote.element, 'fontSize', '7');
+			    var fontElements = document.getElementsByTagName('font');
 			    for (var i = 0, len = fontElements.length; i < len; ++i) {
-			        if (fontElements[i].size == "7") {
-			            fontElements[i].removeAttribute("size");
+			        if (fontElements[i].size == '7') {
+			            fontElements[i].removeAttribute('size');
 			            fontElements[i].style.fontSize = event.target.textContent+'px';
 			        }
 			    }
 				event.stopPropagation();
 			}
 			editableNote.insertButton = function (elementType) {
-				let node = document.createElement('button');
-				let label = document.createElement('label');
-				let input = document.createElement('input');
-				let icon = document.createElement('i');
-				let dropdown = document.createElement('div');
-				let fontSizeList = document.createElement('span');
-				let attr;
+				var node = document.createElement('button');
+				var label = document.createElement('label');
+				var input = document.createElement('input');
+				var icon = document.createElement('i');
+				var dropdown = document.createElement('div');
+				var fontSizeList = document.createElement('span');
+				var attr;
 
 				switch (elementType) {
 					case 'underline':
@@ -102,7 +103,7 @@
 						break;
 					case 'font-size':
 						attr = document.createAttribute('class');
-						attr.value = 'editable-note-button fa';
+						attr.value = 'editable-note-button font-size fa';
 						node.setAttributeNode(attr);
 						label.style.width = '100%';
 						label.style.height = '100%';
@@ -112,11 +113,11 @@
 						icon.setAttributeNode(attr);
 						label.appendChild(icon);
 						iconClone = icon.cloneNode(true);
-						iconClone.style.fontSize = '12px';
+						iconClone.style.fontSize = '11px';
 						attr = document.createAttribute('class');
 						attr.value = 'dropdown-font-size';
 						dropdown.setAttributeNode(attr);
-						for(let key in this.fontSizes) {
+						for(var key in this.fontSizes) {
 							fontSizeList.textContent = this.fontSizes[key];
 							dropdown.appendChild(fontSizeList.cloneNode(true));
 						}
@@ -166,123 +167,135 @@
 						input.addEventListener('change', this.setEventType, false);
 						input.eventType = 'hiliteColor';
 						break;
+					case 'align-left':
+						attr = document.createAttribute('class');
+						attr.value = 'editable-note-button fa fa-'+elementType;
+						node.setAttributeNode(attr);
+						node.addEventListener('click', this.setEventType, false);
+						node.eventType = 'justifyLeft';
+						break;
+					case 'align-center':
+						attr = document.createAttribute('class');
+						attr.value = 'editable-note-button fa fa-'+elementType;
+						node.setAttributeNode(attr);
+						node.addEventListener('click', this.setEventType, false);
+						node.eventType = 'justifyCenter';
+						break;
+					case 'align-right':
+						attr = document.createAttribute('class');
+						attr.value = 'editable-note-button fa fa-'+elementType;
+						node.setAttributeNode(attr);
+						node.addEventListener('click', this.setEventType, false);
+						node.eventType = 'justifyRight';
+						break;
+					case 'align-justify':
+						attr = document.createAttribute('class');
+						attr.value = 'editable-note-button fa fa-'+elementType;
+						node.setAttributeNode(attr);
+						node.addEventListener('click', this.setEventType, false);
+						node.eventType = 'justifyFull';
+						break;
 				}
 				this.container.insertBefore(node, this.element);
 			}
-			editableNote.setStyle = function (width, height) {
+			editableNote.setSize = function (width, height) {
 				this.element.style.width = width[length-1] == '%' ? (width+'%') : (width+'px');
+				this.container.style.width = width[length-1] == '%' ? (width+'%') : (width+'px');
 				this.element.style.height = height[length-1] == '%' ? (height+'%') : (height+'px');
-				this.element.style.padding = 5+"px";
-				this.element.style.marginTop = 5+"px";
 			}
 			editableNote.setEventType = function (event) {
 				event.target.eventType == 'foreColor' || event.target.eventType == 'hiliteColor' ?
-					document.execCommand(event.target.eventType, false, event.target.value) :
-					document.execCommand(event.target.eventType)
+					execCommandOnElement(editableNote.element, event.target.eventType, event.target.value) :
+					execCommandOnElement(editableNote.element, event.target.eventType, null)
 			}
 			editableNote.toggleDropdown = function () {
-				let el = document.getElementsByClassName('dropdown-font-size');
-				el[0].classList[1] ? 
+				var el = document.getElementsByClassName('dropdown-font-size');
+				el[0].classList[1] ?
 					setAttributes(el[0], {'class': 'dropdown-font-size'}) : setAttributes(el[0], {'class': 'dropdown-font-size open'})
 			}
 			editableNote.focusOutDropdown = function () {
-				let el = document.getElementsByClassName('dropdown-font-size');
+				var el = document.getElementsByClassName('dropdown-font-size');
 				setAttributes(el[0], {'class': 'dropdown-font-size'})
 			}
 			function setAttributes(el, attrs) {
-				for(let key in attrs) {
+				for(var key in attrs) {
 					el.setAttribute(key, attrs[key]);
 				}
 			}
-			function pasteHtmlAtCaret(html, selectPastedContent) {
-			    let sel, range;
-			    if (window.getSelection) {
-			        // IE9 and non-IE
-			        sel = window.getSelection();
-			        if (sel.getRangeAt && sel.rangeCount) {
-			            range = sel.getRangeAt(0);
-			            range.deleteContents();
-			            // Range.createContextualFragment() would be useful here but is
-			            // only relatively recently standardized and is not supported in
-			            // some browsers (IE9, for one)
-			            let el = document.createElement("div");
-			            el.innerHTML = html;
-			            let frag = document.createDocumentFragment(), node, lastNode;
-			            while ( (node = el.firstChild) ) {
-			                lastNode = frag.appendChild(node);
-			            }
-			            let firstNode = frag.firstChild;
-			            range.insertNode(frag);        
-			            // Preserve the selection
-			            if (lastNode) {
-			                range = range.cloneRange();
-			                range.setStartAfter(lastNode);
-			                if (selectPastedContent) {
-			                    range.setStartBefore(firstNode);
-			                } else {
-			                    range.collapse(true);
-			                }
-			                sel.removeAllRanges();
-			                sel.addRange(range);
-			            }
-			        }
-			    } else if ( (sel = document.selection) && sel.type != "Control") {
-			        // IE < 9
-			        let originalRange = sel.createRange();
-			        originalRange.collapse(true);
-			        sel.createRange().pasteHTML(html);
-			        if (selectPastedContent) {
-			            range = sel.createRange();
-			            range.setEndPoint("StartToStart", originalRange);
-			            range.select();
-			        }
-			    }
-			}
-			function getSelectionHtml() {
-			    var html = "";
-			    if (typeof window.getSelection != "undefined") {
-			        var sel = window.getSelection();
-			        if (sel.rangeCount) {
-			            var container = document.createElement("div");
-			            for (var i = 0, len = sel.rangeCount; i < len; ++i) {
-			                container.appendChild(sel.getRangeAt(i).cloneContents());
-			            }
-			            html = container.innerHTML;
-			        }
-			    } else if (typeof document.selection != "undefined") {
-			        if (document.selection.type == "Text") {
-			            html = document.selection.createRange().htmlText;
-			        }
-			    }
-			    return html;
+			function execCommandOnElement(el, commandName, value) {
+				if (typeof value == "undefined") {
+					value = null;
+				}
+				if (typeof window.getSelection != "undefined") {
+					// Non-IE case
+					var sel = window.getSelection();
+					// Save the current selection
+					var savedRanges = [];
+					for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+					    savedRanges[i] = sel.getRangeAt(i).cloneRange();
+					}
+					// Temporarily enable designMode so that
+					// document.execCommand() will work
+					document.designMode = "on";
+					// Select the element's content
+					sel = window.getSelection();
+					var range = document.createRange();
+					range.selectNodeContents(el);
+					sel.removeAllRanges();
+					sel.addRange(range);
+					// Execute the command
+					document.execCommand(commandName, false, value);
+					// Disable designMode
+					document.designMode = "off";
+					// Restore the previous selection
+					sel = window.getSelection();
+					sel.removeAllRanges();
+					for (var i = 0, len = savedRanges.length; i < len; ++i) {
+						sel.addRange(savedRanges[i]);
+					}
+				} else if (typeof document.body.createTextRange != "undefined") {
+					// IE case
+					var textRange = document.body.createTextRange();
+					textRange.moveToElementText(el);
+					textRange.execCommand(commandName, false, value);
+				}
 			}
 			editableNote.initialize();
 		});
 	</script>
 	<style>
-		body {
-			background-color: grey;
-		}
 		.dropdown-font-size {
-			width: 50px;
-			height: 100px;
+			width: 100%;
+			height: 160px;
+			font-weight: bold;
 			position: absolute;
-			top: 20px;
+			top: 40px;
 			display: none;
 			border-bottom-left-radius: 3px;
 			border-top-left-radius: 3px;
-			left: -5px;
 			box-shadow: 1px 1px 4px -1px black;
 			background-color: white;
 			overflow-y: scroll;
+			font-family: monospace;
 		}
 		.dropdown-font-size.open {
 			display: block;
 		}
 		.dropdown-font-size > span {
 			display: block;
+			border-bottom: #e7e7e7 solid 1px;
+			transition: background-color 0.4s linear;
+		}
+		.dropdown-font-size > span:hover {
+			background-color: #e7e7e7;
+			transition: background-color 0.4s linear;
 		}
 		#editable-note {
+			border-top-right-radius: 0px;
+			border-top-left-radius: 0px;
+			border-bottom-right-radius: 2.5px;
+			border-bottom-left-radius: 2.5px;
+			margin-top: 2.5px;
 			word-wrap: break-word;
 			overflow-wrap: break-word;
    			white-space: normal;
@@ -290,11 +303,52 @@
 			min-height: 200px;
 			overflow: hidden;
 			background-color: white;
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+    		padding: 10px;
 		}
 		#editable-note > p {
 			width: 100%;
 			min-height: 20px;
 			margin: 0;
+		}
+		#editable-note-container {
+			display: inline-block;
+			padding: 2.5px;
+			background-color: #e7e7e7;
+    		border-radius: 5px;
+		}
+		#editable-note-container > button {
+			width: 45px;
+			height: 40px;
+			padding: 0px;
+			border: none;
+			background-color: #e7e7e7;
+			transition: background-color 0.4s linear;
+		}
+		div#editable-note-container button:nth-child(3) {
+			margin-right: 45px;
+		}
+		div#editable-note-container button:nth-child(6) {
+			margin-right: 45px;
+		}
+		#editable-note-container > button:hover {
+			background-color: #dfdfdf;
+			transition: background-color 0.4s linear;
+		}
+		#editable-note-container > button.font-size:active, #editable-note-container > button.font-size:focus {
+			background-color: #dfdfdf;
+		}
+		#editable-note-container > button > label {
+			line-height: 40px;
+			display: block;
+		}
+		#editable-note-container > button, #editable-note-container > button > label {
+			cursor: pointer;
+		}
+		*:focus {
+    		outline: none;
 		}
 	</style>
 	<head>
@@ -304,6 +358,5 @@
 	</head>
 	<body>
 		<div id="editable-note"></div>
-		<div contenteditable="true">s</div>
 	</body>
 </hmtl>
