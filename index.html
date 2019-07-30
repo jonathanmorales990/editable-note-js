@@ -5,11 +5,13 @@
 			var editableNote = {
 				element: document.getElementById('editable-note'),
 				container: null,
-				paragraph: 0,
+				fontBackgroundColor: '#ffffff',
+				fontColor: '#000000',
 				toolbar: [
 					'bold',
 					'underline',
 					'italic',
+					'eraser',
 					'font-size',
 					'font-color',
 					'background-font-color',
@@ -17,9 +19,21 @@
 					'align-justify',
 					'align-left',
 					'align-center',
-					'align-right'
+					'align-right',
+					'undo',
+					'redo'
 				],
-				fontFamily: ['serif','Helvetica', 'Arial', 'Arial Black', 'Impact', 'cursive', 'Courier New', 'Verdana', 'Times New Roman'],
+				fontFamily: [
+					'serif',
+					'Helvetica',
+					'Arial',
+					'Arial Black',
+					'Impact',
+					'cursive',
+					'Courier New',
+					'Verdana',
+					'Times New Roman'
+				],
 				fontSizes: ['8','9','10','11','12','14','16','18','24','30','36','40','48']
 			}
 			editableNote.initialize = function () {
@@ -68,12 +82,14 @@
 			editableNote.setEventFontSize = function (event) {
 				document.execCommand('fontSize', false, '7');
 			    var fontElements = document.getElementsByTagName('font');
-			    for (var i = 0, len = fontElements.length; i < len; ++i) {
-			        if (fontElements[i].size == '7') {
-			            fontElements[i].removeAttribute('size');
-			            fontElements[i].style.fontSize = event.target.textContent+'px';
-			        }
-			    }
+			    if (fontElements) {
+			    	for (var i = 0, len = fontElements.length; i < len; ++i) {
+			        	if (fontElements[i].size == '7') {
+			            	fontElements[i].removeAttribute('size');
+			            	fontElements[i].style.fontSize = event.target.textContent+'px';
+			       		}
+			    	}
+				}
 				//event.stopPropagation();
 			}
 			editableNote.insertButton = function (elementType) {
@@ -152,11 +168,10 @@
 						}
 						label.style.fontFamily = this.fontFamily[0];
 						label.textContent = this.fontFamily[0];
-						label.style.fontSize = '14px';
+						label.style.fontSize = '12px';
 						label.appendChild(dropdown);
 						node.appendChild(label);
 						dropdown.addEventListener('click', function (event) {
-							label.textContent = event.target.textContent; 
 							editableNote.setEventFontFamily(event, label, dropdown); 
 						}, false);
 						node.addEventListener('click', this.toggleDropdownFontFamily, false);
@@ -183,19 +198,25 @@
 						label.appendChild(triangleButton);
 						label.appendChild(input);
 						node.appendChild(label);
-						input.addEventListener('change', this.setEventType, false);
+						input.addEventListener('change', function (event) {
+							editableNote.setColorEvent(event, label);
+						}, false);
+						input.eventType = 'foreColor';
 						label.addEventListener('click', function (event) {
-							console.log(event.target)
 							if (event.target.nodeName == 'INPUT') {
 								return true;
 							} else {
+								label.eventType = 'foreColor';
+								label.changeColor = editableNote.fontColor;
+								icon.eventType = 'foreColor';
+								icon.changeColor = editableNote.fontColor;
+								editableNote.setEventType(event);
 								event.preventDefault();
 							}
 						});
 						triangleButton.addEventListener('click', function (event) {
 							event.stopPropagation();
 						});
-						input.eventType = 'foreColor';
 						break;
 					case 'background-font-color':
 						attr = document.createAttribute('class');
@@ -219,8 +240,25 @@
 						label.appendChild(triangleButton);
 						label.appendChild(input);
 						node.appendChild(label);
-						input.addEventListener('change', this.setEventType, false);
+						input.addEventListener('change', function (event) {
+							editableNote.setColorEvent(event, label);
+						}, false);
 						input.eventType = 'hiliteColor';
+						label.addEventListener('click', function (event) {
+							if (event.target.nodeName == 'INPUT') {
+								return true;
+							} else {
+								event.preventDefault();
+								label.eventType = 'hiliteColor';
+								label.changeColor = editableNote.fontBackgroundColor;
+								icon.eventType = 'hiliteColor';
+								icon.changeColor = editableNote.fontBackgroundColor;
+								editableNote.setEventType(event);
+							}
+						});
+						triangleButton.addEventListener('click', function (event) {
+							event.stopPropagation();
+						});
 						break;
 					case 'align-left':
 						attr = document.createAttribute('class');
@@ -250,13 +288,28 @@
 						node.addEventListener('click', this.setEventType, false);
 						node.eventType = 'justifyFull';
 						break;
-					case 'align-justify':
+					case 'redo':
+						attr = document.createAttribute('class');
+						attr.value = 'editable-note-button fa fa-'+elementType+'-alt';
+						node.setAttributeNode(attr);
+						node.addEventListener('click', this.setEventType, false);
+						node.eventType = 'justifyFull';
+						break;
+					case 'undo':
+						attr = document.createAttribute('class');
+						attr.value = 'editable-note-button fa fa-'+elementType+'-alt';
+						node.setAttributeNode(attr);
+						node.addEventListener('click', this.setEventType, false);
+						node.eventType = 'justifyFull';
+						break;
+					case 'eraser':
 						attr = document.createAttribute('class');
 						attr.value = 'editable-note-button fa fa-'+elementType;
 						node.setAttributeNode(attr);
 						node.addEventListener('click', this.setEventType, false);
 						node.eventType = 'justifyFull';
 						break;
+
 				}
 				this.container.insertBefore(node, this.element);
 			}
@@ -265,9 +318,19 @@
 				this.container.style.width = width[length-1] == '%' ? (width+'%') : (width+'px');
 				this.element.style.height = height[length-1] == '%' ? (height+'%') : (height+'px');
 			}
+			editableNote.setColorEvent = function (event, label) {
+				if (event.target.eventType == 'foreColor') {
+					label.style.color = event.target.value;
+					editableNote.fontColor = event.target.value;
+				}
+				if (event.target.eventType == 'hiliteColor') {
+					label.style.backgroundColor = event.target.value;
+					editableNote.fontBackgroundColor = event.target.value;
+				}
+			}
 			editableNote.setEventType = function (event) {
 				event.target.eventType == 'foreColor' || event.target.eventType == 'hiliteColor' ?
-					document.execCommand(event.target.eventType, false, event.target.value) :
+					document.execCommand(event.target.eventType, false, event.target.changeColor) :
 					document.execCommand(event.target.eventType, false, null)
 			}
 			editableNote.toggleDropdownFontSize = function () {
@@ -297,8 +360,8 @@
 		});
 	</script>
 	<style>
-		.dropdown-font-family {
-			width: 150%;
+		#editable-note-container .dropdown-font-family {
+			width: 125%;
 			height: 160px;
 			position: absolute;
 			top: 40px;
@@ -307,10 +370,11 @@
 			border-top-left-radius: 3px;
 			box-shadow: 1px 1px 4px -1px black;
 			background-color: white;
+			left: 1px;
 			overflow-y: scroll;
 			font-family: monospace;
 		}
-		.dropdown-font-size {
+		#editable-note-container .dropdown-font-size {
 			width: 100%;
 			height: 160px;
 			font-weight: bold;
@@ -324,19 +388,19 @@
 			overflow-y: scroll;
 			font-family: monospace;
 		}
-		.dropdown-font-size.open, .dropdown-font-family.open {
+		#editable-note-container .dropdown-font-size.open, #editable-note-container .dropdown-font-family.open {
 			display: block;
 		}
-		.dropdown-font-size > span {
+		#editable-note-container .dropdown-font-size > span {
 			display: block;
 			border-bottom: #e7e7e7 solid 1px;
 			transition: background-color 0.4s linear;
 		}
-		.dropdown-font-size > span:hover {
+		#editable-note-container .dropdown-font-size > span:hover {
 			background-color: #e7e7e7;
 			transition: background-color 0.4s linear;
 		}
-		.dropdown-font-family > span {
+		#editable-note-container .dropdown-font-family > span {
 			font-weight: normal;
 			display: block;
 			text-align: left;
@@ -345,11 +409,11 @@
 			border-bottom: #e7e7e7 solid 1px;
 			transition: background-color 0.4s linear;
 		}
-		.dropdown-font-family > span:hover {
+		#editable-note-container .dropdown-font-family > span:hover {
 			background-color: #e7e7e7;
 			transition: background-color 0.4s linear;
 		}
-		.font-triangle-button {
+		#editable-note-container .font-triangle-button {
 			width: 0;
 			height: 0;
 			border-style: solid;
@@ -413,10 +477,13 @@
 			background-color: #e7e7e7;
 			transition: background-color 0.4s linear;
 		}
-		div#editable-note-container button:nth-child(3) {
+		div#editable-note-container button:nth-child(4) {
 			margin-right: 45px;
 		}
-		div#editable-note-container button:nth-child(7) {
+		div#editable-note-container button:nth-child(8) {
+			margin-right: 45px;
+		}
+		div#editable-note-container button:nth-child(12) {
 			margin-right: 45px;
 		}
 		#editable-note-container > button:hover {
@@ -436,8 +503,7 @@
 		#editable-note-container > button.font-family > label {
 			padding: 0px 10px 0px 10px;
 			width: auto !important;
-			line-height: 43px;
-			min-width: 100px;
+			min-width: 40px;
 		}
 		#editable-note-container > button, #editable-note-container > button > label {
 			cursor: pointer;
@@ -448,7 +514,7 @@
 	</style>
 	<head>
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 		<title>Editable Note</title>
 	</head>
 	<body>
