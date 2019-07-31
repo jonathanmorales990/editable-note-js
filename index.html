@@ -42,7 +42,7 @@
 				this.element.addEventListener('keydown', this.onChangeText, false);
 				this.setSize(900, 200);
 				for(var key in this.toolbar) {
-    				this.insertButton(this.toolbar[key]);
+    					this.insertButton(this.toolbar[key]);
 			  	}
 				this.insertParagraph();
 			}
@@ -81,14 +81,14 @@
 			}
 			editableNote.setEventFontSize = function (event) {
 				document.execCommand('fontSize', false, '7');
-			    var fontElements = document.getElementsByTagName('font');
-			    if (fontElements) {
-			    	for (var i = 0, len = fontElements.length; i < len; ++i) {
-			        	if (fontElements[i].size == '7') {
-			            	fontElements[i].removeAttribute('size');
-			            	fontElements[i].style.fontSize = event.target.textContent+'px';
-			       		}
-			    	}
+			    	var fontElements = document.getElementsByTagName('font');
+			    	if (fontElements) {
+					for (var i = 0, len = fontElements.length; i < len; ++i) {
+						if (fontElements[i].size == '7') {
+						fontElements[i].removeAttribute('size');
+						fontElements[i].style.fontSize = event.target.textContent+'px';
+						}
+					}
 				}
 				//event.stopPropagation();
 			}
@@ -439,7 +439,7 @@
 			-webkit-box-sizing: border-box;
 			-moz-box-sizing: border-box;
 			box-sizing: border-box;
-    		padding: 10px;
+    			padding: 10px;
 		}
 		#editable-note > p {
 			width: 100%;
@@ -451,7 +451,7 @@
 			padding: 2.5px;
 			box-shadow: 0px 0px 3px 0px black;
 			background-color: #e7e7e7;
-    		border-radius: 5px;
+    			border-radius: 5px;
 		}
 		#editable-note-container > button {
 			width: 45px;
@@ -555,7 +555,7 @@
 			cursor: pointer;
 		}
 		*:focus {
-    		outline: none;
+    			outline: none;
 		}
 	</style>
 	<head>
