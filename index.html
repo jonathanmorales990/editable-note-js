@@ -20,8 +20,8 @@
 					'align-left',
 					'align-center',
 					'align-right',
+					'redo',
 					'undo',
-					'redo'
 				],
 				fontFamily: [
 					'serif',
@@ -293,21 +293,21 @@
 						attr.value = 'editable-note-button fa fa-'+elementType+'-alt';
 						node.setAttributeNode(attr);
 						node.addEventListener('click', this.setEventType, false);
-						node.eventType = 'justifyFull';
+						node.eventType = 'redo';
 						break;
 					case 'undo':
 						attr = document.createAttribute('class');
 						attr.value = 'editable-note-button fa fa-'+elementType+'-alt';
 						node.setAttributeNode(attr);
 						node.addEventListener('click', this.setEventType, false);
-						node.eventType = 'justifyFull';
+						node.eventType = 'undo';
 						break;
 					case 'eraser':
 						attr = document.createAttribute('class');
 						attr.value = 'editable-note-button fa fa-'+elementType;
 						node.setAttributeNode(attr);
 						node.addEventListener('click', this.setEventType, false);
-						node.eventType = 'justifyFull';
+						node.eventType = 'removeFormat';
 						break;
 
 				}
@@ -449,6 +449,7 @@
 		#editable-note-container {
 			display: inline-block;
 			padding: 2.5px;
+			box-shadow: 0px 0px 3px 0px black;
 			background-color: #e7e7e7;
     		border-radius: 5px;
 		}
@@ -477,14 +478,57 @@
 			background-color: #e7e7e7;
 			transition: background-color 0.4s linear;
 		}
+		div#editable-note-container button.font-family, 
+		div#editable-note-container button {
+			border-top: solid 1px #cacaca;
+			border-bottom: solid 1px #cacaca;
+		}		
+		div#editable-note-container button:nth-child(1) {
+			border-left: solid 1px #cacaca;
+			border-top-left-radius: 2.5px;
+			border-bottom-left-radius: 2.5px;
+		}
 		div#editable-note-container button:nth-child(4) {
-			margin-right: 45px;
+			border-right: solid 1px #cacaca;
+			border-top-right-radius: 2.5px;
+			border-bottom-right-radius: 2.5px;
+			margin-right: 10px;
+		}
+		div#editable-note-container button:nth-child(5) {
+			border-left: solid 1px #cacaca;
+			border-top-left-radius: 2.5px;
+			border-bottom-left-radius: 2.5px;
 		}
 		div#editable-note-container button:nth-child(8) {
-			margin-right: 45px;
+			border-right: solid 1px #cacaca;
+			border-top-right-radius: 2.5px;
+			border-bottom-right-radius: 2.5px;
+			margin-right: 10px;
+		}
+		div#editable-note-container button:nth-child(9) {
+			border-left: solid 1px #cacaca;
+			border-top-left-radius: 2.5px;
+			border-bottom-left-radius: 2.5px;
 		}
 		div#editable-note-container button:nth-child(12) {
-			margin-right: 45px;
+			border-right: solid 1px #cacaca;
+			border-top-right-radius: 2.5px;
+			border-bottom-right-radius: 2.5px;
+			margin-right: 10px;
+		}
+		div#editable-note-container button:nth-child(14) {
+			border-left: solid 1px #cacaca;
+			border-top-left-radius: 2.5px;
+			border-bottom-left-radius: 2.5px;
+			position: relative;
+			float: right;
+		}
+		div#editable-note-container button:nth-child(13) {
+			border-right: solid 1px #cacaca;
+			border-top-right-radius: 2.5px;
+			border-bottom-right-radius: 2.5px;
+			position: relative;
+			float: right;
 		}
 		#editable-note-container > button:hover {
 			background-color: #dfdfdf;
@@ -497,13 +541,14 @@
 			background-color: #dfdfdf;
 		}
 		#editable-note-container > button > label {
-			line-height: 40px;
+			line-height: 38px;
 			display: block;
 		}
 		#editable-note-container > button.font-family > label {
 			padding: 0px 10px 0px 10px;
 			width: auto !important;
 			min-width: 40px;
+			line-height: 40px;
 		}
 		#editable-note-container > button, #editable-note-container > button > label {
 			cursor: pointer;
