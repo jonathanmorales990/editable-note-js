@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 	<html lang="pt-br">
-	<script type="text/javascript" src="dist/editable-note.js"></script>
-	<link rel="stylesheet" type="text/css" href="dist/editable-note.css"/>
-	<script type="text/javascript">
-		document.addEventListener("DOMContentLoaded", function (event) {
-			editableNote.initialize();
-			editableNote.setSize(900, 300);
-			editableNote.setFontFamily(['serif','Helvetica','Arial']);
-			editableNote.setFontSize(['10', '12', '13']);
-			editableNote.setToolbar(['bold','underline','italic','eraser']);
-		});
-	</script>
 	<head>
 		<meta charset="utf-8">
+		<script type="text/javascript" src="dist/editable-note.js"></script>
+		<script type="text/javascript">
+			document.addEventListener("DOMContentLoaded", function (event) {
+				editableNote.fontSizes = ['10', '12', '13'];
+				editableNote.fontFamily = ['serif','Helvetica','Arial'];
+				editableNote.toolbar = ['bold','underline','italic','eraser'];
+				editableNote.initialize(900, 300);
+			});
+		</script>
+		<link rel="stylesheet" type="text/css" href="dist/editable-note.css"/>
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"/>
 		<title>Editable Note</title>
 	</head>
-	<body style="height: 600px;">
+	<body>
 		<div id="editable-note"></div>
 	</body>
 </hmtl>
