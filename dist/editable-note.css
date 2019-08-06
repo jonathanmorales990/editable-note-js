@@ -53,6 +53,9 @@
 	background-color: #e7e7e7;
 	transition: background-color 0.4s linear;
 }
+#editable-note-container > .container-button {
+	display: inline-block;
+}
 #editable-note-container .font-triangle-button {
 	width: 0;
 	height: 0;
@@ -92,7 +95,7 @@
 	background-color: #e7e7e7;
 	border-radius: 5px;
 }
-#editable-note-container > button {
+#editable-note-container > div > button {
 	width: 45px;
 	height: 30px;
 	padding: 0px;
@@ -100,7 +103,7 @@
 	background-color: #e7e7e7;
 	transition: background-color 0.4s linear;
 }
-#editable-note-container > button.font-family {
+#editable-note-container > div > button.font-family {
 	min-width: 100px;
 	height: 30px;
 	padding: 0px;
@@ -108,7 +111,7 @@
 	background-color: #e7e7e7;
 	transition: background-color 0.4s linear;
 }
-#editable-note-container > button.font-family {
+#editable-note-container > div > button.font-family {
 	width: auto;
 	min-width: 100px;
 	height: 30px;
@@ -117,12 +120,12 @@
 	background-color: #e7e7e7;
 	transition: background-color 0.4s linear;
 }
-div#editable-note-container button.font-family, 
-div#editable-note-container button {
+/*div#editable-note-container div > button.font-family, 
+div#editable-note-container div > button {
 	border-top: solid 1px #cacaca;
 	border-bottom: solid 1px #cacaca;
-}
-div#editable-note-container button:nth-child(1) {
+}*/
+/*div#editable-note-container button:nth-child(1) {
 	border-left: solid 1px #cacaca;
 	border-top-left-radius: 2.5px;
 	border-bottom-left-radius: 2.5px;
@@ -168,31 +171,31 @@ div#editable-note-container button:nth-child(13) {
 	border-bottom-right-radius: 2.5px;
 	position: relative;
 	float: right;
-}
-#editable-note-container > button:hover {
+}*/
+#editable-note-container > div > button:hover {
 	background-color: #dfdfdf;
 	transition: background-color 0.4s linear;
 }
-#editable-note-container > button.font-size:active,
-#editable-note-container > button.font-size:focus,
-#editable-note-container > button.font-family:active,
-#editable-note-container > button.font-family:focus  {
+#editable-note-container > div > button.font-size:active,
+#editable-note-container > div > button.font-size:focus,
+#editable-note-container > div > button.font-family:active,
+#editable-note-container > div > button.font-family:focus  {
 	background-color: #dfdfdf;
 }
-#editable-note-container > button > label {
+#editable-note-container > div > button > label {
 	line-height: 28px;
 	display: block;
 }
-#editable-note-container > button.font-family > label {
+#editable-note-container > div > button.font-family > label {
 	padding: 0px 10px 0px 10px;
 	font-weight: normal;
 	width: auto !important;
 	min-width: 40px;
 	line-height: 30px;
 }
-#editable-note-container > button, #editable-note-container > button > label {
+#editable-note-container > div > button, #editable-note-container  > div > button > label {
 	cursor: pointer;
 }
-#editable-note-container > *:focus {
+#editable-note-container > *:focus, #editable-note-container > div > button:focus {
 	outline: none;
 }

@@ -1,6 +1,10 @@
 editableNote = {
 	element: null,
 	container: null,
+	containerGeneral: null,
+	containerFonts: null,
+	containerAlign: null,
+	containerUndoRedo: null,
 	fontBackgroundColor: '#ffffff',
 	fontColor: '#000000',
 	toolbar: [
@@ -35,6 +39,8 @@ editableNote = {
 editableNote.initialize = function (width = 900, height = 300) {
 	this.element = document.getElementById('editable-note');
 	this.insertContainerEditableNote();
+	this.insertContainerButtonEditableNote();
+	this.insertButtonBorders();
 	this.setSize(width, height);
 	this.element.contentEditable = 'true';
 	this.element.addEventListener('keydown', this.onChangeText, false);
@@ -52,6 +58,23 @@ editableNote.onChangeText = function (event) {
 editableNote.insertParagraph = function () {
 	this.insertNode('p','class','paragraph');
 }
+editableNote.insertButtonBorders = function () {
+	var children = this.containerGeneral.childNodes;
+	console.log(children);
+	console.log(Array.from(children));
+}
+editableNote.insertContainerButtonEditableNote = function () {
+	var types = ['general', 'fonts', 'align', 'undo-redo'];
+	for(var key in types) {
+		var container = document.createElement('div');
+		setAttributes(container, {'class': 'container-button '+types[key]});
+		this.container.insertBefore(container, this.element);
+		types[key] == 'general' && (this.containerGeneral = container)
+		types[key] == 'fonts' && (this.containerFonts = container)
+		types[key] == 'align' && (this.containerAlign = container)
+		types[key] == 'undo-redo' && (this.containerUndoRedo = container)
+	}
+}
 editableNote.insertContainerEditableNote = function () {
 	var parent = this.element.parentNode;
 	var wrapper = document.createElement('div');
@@ -60,7 +83,7 @@ editableNote.insertContainerEditableNote = function () {
 	wrapper.setAttributeNode(attr);
 	parent.replaceChild(wrapper, this.element);
 	wrapper.appendChild(this.element);
-	this.container = document.getElementById('editable-note-container');
+	this.container = wrapper;
 }
 editableNote.insertNode = function (elementType, attributeName = '', attributeValue = '') {
 	var node = document.createElement(elementType);
@@ -106,6 +129,7 @@ editableNote.insertButton = function (elementType) {
 			node.setAttributeNode(attr);
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'underline';
+			this.containerGeneral.appendChild(node);
 			break;
 		case 'bold':
 			attr = document.createAttribute('class');
@@ -113,6 +137,7 @@ editableNote.insertButton = function (elementType) {
 			node.setAttributeNode(attr);
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'bold';
+			this.containerGeneral.appendChild(node);
 			break;
 		case 'italic':
 			attr = document.createAttribute('class');
@@ -120,6 +145,7 @@ editableNote.insertButton = function (elementType) {
 			node.setAttributeNode(attr);
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'italic';
+			this.containerGeneral.appendChild(node);
 			break;
 		case 'font-size':
 			attr = document.createAttribute('class');
@@ -147,6 +173,7 @@ editableNote.insertButton = function (elementType) {
 			dropdown.addEventListener('click', this.setEventFontSize, false);
 			node.addEventListener('click', this.toggleDropdownFontSize, false);
 			node.addEventListener('focusout', this.focusOutDropdownFontSize, false);
+			this.containerFonts.appendChild(node);
 			break;
 		case 'font-family':
 			attr = document.createAttribute('class');
@@ -173,6 +200,7 @@ editableNote.insertButton = function (elementType) {
 			}, false);
 			node.addEventListener('click', this.toggleDropdownFontFamily, false);
 			node.addEventListener('focusout', this.focusOutDropdownFontFamily, false);
+			this.containerFonts.appendChild(node);
 			break;
 		case 'font-color':
 			attr = document.createAttribute('class');
@@ -196,7 +224,7 @@ editableNote.insertButton = function (elementType) {
 			label.appendChild(input);
 			node.appendChild(label);
 			input.addEventListener('change', function (event) {
-				editableNote.setColorEvent(event, label);
+				editableNote.setColorEvent(event, label, icon);
 			}, false);
 			input.eventType = 'foreColor';
 			label.addEventListener('click', function (event) {
@@ -214,6 +242,7 @@ editableNote.insertButton = function (elementType) {
 			triangleButton.addEventListener('click', function (event) {
 				event.stopPropagation();
 			});
+			this.containerFonts.appendChild(node);
 			break;
 		case 'background-font-color':
 			attr = document.createAttribute('class');
@@ -221,11 +250,12 @@ editableNote.insertButton = function (elementType) {
 			node.setAttributeNode(attr);
 			label.style.width = '100%';
 			label.style.height = '100%';
-			label.style.backgroundColor = 'white';
+			icon.style.backgroundColor = 'white';
 			input.style.display = 'none';
 			attr = document.createAttribute('class');
 			attr.value = 'fa fa-font';
 			icon.setAttributeNode(attr);
+			icon.style.padding = '3px 5px 3px 5px';
 			attr = document.createAttribute('class');
 			attr.value = 'font-triangle-button';
 			triangleButton.setAttributeNode(attr);
@@ -238,7 +268,7 @@ editableNote.insertButton = function (elementType) {
 			label.appendChild(input);
 			node.appendChild(label);
 			input.addEventListener('change', function (event) {
-				editableNote.setColorEvent(event, label);
+				editableNote.setColorEvent(event, label, icon);
 			}, false);
 			input.eventType = 'hiliteColor';
 			label.addEventListener('click', function (event) {
@@ -256,6 +286,7 @@ editableNote.insertButton = function (elementType) {
 			triangleButton.addEventListener('click', function (event) {
 				event.stopPropagation();
 			});
+			this.containerFonts.appendChild(node);
 			break;
 		case 'align-left':
 			attr = document.createAttribute('class');
@@ -263,6 +294,7 @@ editableNote.insertButton = function (elementType) {
 			node.setAttributeNode(attr);
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'justifyLeft';
+			this.containerAlign.appendChild(node);
 			break;
 		case 'align-center':
 			attr = document.createAttribute('class');
@@ -270,6 +302,7 @@ editableNote.insertButton = function (elementType) {
 			node.setAttributeNode(attr);
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'justifyCenter';
+			this.containerAlign.appendChild(node);
 			break;
 		case 'align-right':
 			attr = document.createAttribute('class');
@@ -277,6 +310,7 @@ editableNote.insertButton = function (elementType) {
 			node.setAttributeNode(attr);
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'justifyRight';
+			this.containerAlign.appendChild(node);
 			break;
 		case 'align-justify':
 			attr = document.createAttribute('class');
@@ -284,6 +318,7 @@ editableNote.insertButton = function (elementType) {
 			node.setAttributeNode(attr);
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'justifyFull';
+			this.containerAlign.appendChild(node);
 			break;
 		case 'redo':
 			attr = document.createAttribute('class');
@@ -291,6 +326,7 @@ editableNote.insertButton = function (elementType) {
 			node.setAttributeNode(attr);
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'redo';
+			this.containerUndoRedo.appendChild(node);
 			break;
 		case 'undo':
 			attr = document.createAttribute('class');
@@ -298,6 +334,7 @@ editableNote.insertButton = function (elementType) {
 			node.setAttributeNode(attr);
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'undo';
+			this.containerUndoRedo.appendChild(node);
 			break;
 		case 'eraser':
 			attr = document.createAttribute('class');
@@ -305,10 +342,11 @@ editableNote.insertButton = function (elementType) {
 			node.setAttributeNode(attr);
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'removeFormat';
+			this.containerGeneral.appendChild(node);
 			break;
 
 	}
-	this.container.insertBefore(node, this.element);
+	//this.container.insertBefore(node, this.element);
 }
 editableNote.setSize = function (width, height) {
 	this.element.style.width = width[width.length-1] == '%' ? (width) : (width+'px');
@@ -321,13 +359,13 @@ editableNote.setSize = function (width, height) {
 		this.element.style.minHeight = height+'px';
 	}
 }
-editableNote.setColorEvent = function (event, label) {
+editableNote.setColorEvent = function (event, label, icon) {
 	if (event.target.eventType == 'foreColor') {
 		label.style.color = event.target.value;
 		editableNote.fontColor = event.target.value;
 	}
 	if (event.target.eventType == 'hiliteColor') {
-		label.style.backgroundColor = event.target.value;
+		icon.style.backgroundColor = event.target.value;
 		editableNote.fontBackgroundColor = event.target.value;
 	}
 }
