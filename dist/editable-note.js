@@ -40,32 +40,89 @@ editableNote.initialize = function (width = 900, height = 300) {
 	this.element = document.getElementById('editable-note');
 	this.insertContainerEditableNote();
 	this.insertContainerButtonEditableNote();
-	this.insertButtonBorders();
 	this.setSize(width, height);
 	this.element.contentEditable = 'true';
 	this.element.addEventListener('keydown', this.onChangeText, false);
-	for(var key in this.toolbar) {
+	for (var key in this.toolbar) {
 		this.insertButton(this.toolbar[key]);
 	}
 	this.insertParagraph();
+	this.insertButtonBorders();
 }
 editableNote.onChangeText = function (event) {
-	if(event.keyCode == 8 || event.keyCode ==  46)
-		if(this.textContent.length == 0)
-			if(this.childNodes.length <= 1)
+	if (event.keyCode == 8 || event.keyCode ==  46)
+		if (this.textContent.length == 0)
+			if (this.childNodes.length <= 1)
 				event.preventDefault();
 }
 editableNote.insertParagraph = function () {
 	this.insertNode('p','class','paragraph');
 }
 editableNote.insertButtonBorders = function () {
-	var children = this.containerGeneral.childNodes;
-	console.log(children);
-	console.log(Array.from(children));
+	NodeList.prototype.forEach = Array.prototype.forEach
+	this.containerGeneral.childNodes.forEach(function(item, index, array){
+		item.style.borderTop = 'solid 1px #cacaca';
+		item.style.borderBottom = 'solid 1px #cacaca';
+		if (index === 0) {
+			item.style.borderLeft = 'solid 1px #cacaca';
+			item.style.borderTopLeftRadius = '2.5px';
+			item.style.borderBottomLeftRadius = '2.5px';
+		}
+		if (index === (array.length-1)) {
+			item.style.borderRight = 'solid 1px #cacaca';
+			item.style.borderTopRightRadius = '2.5px';
+			item.style.borderBottomRightRadius = '2.5px';
+			item.style.marginRight = '10px';
+		}
+	});
+	this.containerFonts.childNodes.forEach(function(item, index, array){
+		item.style.borderTop = 'solid 1px #cacaca';
+		item.style.borderBottom = 'solid 1px #cacaca';
+		if (index === 0) {
+			item.style.borderLeft = 'solid 1px #cacaca';
+			item.style.borderTopLeftRadius = '2.5px';
+			item.style.borderBottomLeftRadius = '2.5px';
+		}
+		if (index === (array.length-1)) {
+			item.style.borderRight = 'solid 1px #cacaca';
+			item.style.borderTopRightRadius = '2.5px';
+			item.style.borderBottomRightRadius = '2.5px';
+			item.style.marginRight = '10px';
+		}
+	});
+	this.containerAlign.childNodes.forEach(function(item, index, array){
+		item.style.borderTop = 'solid 1px #cacaca';
+		item.style.borderBottom = 'solid 1px #cacaca';
+		if (index === 0) {
+			item.style.borderLeft = 'solid 1px #cacaca';
+			item.style.borderTopLeftRadius = '2.5px';
+			item.style.borderBottomLeftRadius = '2.5px';
+		}
+		if (index === (array.length-1)) {
+			item.style.borderRight = 'solid 1px #cacaca';
+			item.style.borderTopRightRadius = '2.5px';
+			item.style.borderBottomRightRadius = '2.5px';
+			item.style.marginRight = '10px';
+		}
+	});
+	this.containerUndoRedo.childNodes.forEach(function(item, index, array){
+		item.style.borderTop = 'solid 1px #cacaca';
+		item.style.borderBottom = 'solid 1px #cacaca';
+		if (index === 0) {
+			item.style.borderLeft = 'solid 1px #cacaca';
+			item.style.borderTopLeftRadius = '2.5px';
+			item.style.borderBottomLeftRadius = '2.5px';
+		}
+		if (index === (array.length-1)) {
+			item.style.borderRight = 'solid 1px #cacaca';
+			item.style.borderTopRightRadius = '2.5px';
+			item.style.borderBottomRightRadius = '2.5px';
+		}
+	});
 }
 editableNote.insertContainerButtonEditableNote = function () {
 	var types = ['general', 'fonts', 'align', 'undo-redo'];
-	for(var key in types) {
+	for (var key in types) {
 		var container = document.createElement('div');
 		setAttributes(container, {'class': 'container-button '+types[key]});
 		this.container.insertBefore(container, this.element);
@@ -97,7 +154,6 @@ editableNote.setEventFontFamily = function (event, label, dropdown) {
 	label.textContent = event.target.textContent;
 	label.appendChild(dropdown);
 	document.execCommand('fontName', false, event.target.textContent);
-	//event.stopPropagation();
 }
 editableNote.setEventFontSize = function (event) {
 	document.execCommand('fontSize', false, '7');
@@ -110,7 +166,6 @@ editableNote.setEventFontSize = function (event) {
 			}
 		}
 	}
-	//event.stopPropagation();
 }
 editableNote.insertButton = function (elementType) {
 	var node = document.createElement('button');
@@ -196,7 +251,7 @@ editableNote.insertButton = function (elementType) {
 			label.appendChild(dropdown);
 			node.appendChild(label);
 			dropdown.addEventListener('click', function (event) {
-				editableNote.setEventFontFamily(event, label, dropdown); 
+				editableNote.setEventFontFamily(event, label, dropdown);
 			}, false);
 			node.addEventListener('click', this.toggleDropdownFontFamily, false);
 			node.addEventListener('focusout', this.focusOutDropdownFontFamily, false);
@@ -346,7 +401,6 @@ editableNote.insertButton = function (elementType) {
 			break;
 
 	}
-	//this.container.insertBefore(node, this.element);
 }
 editableNote.setSize = function (width, height) {
 	this.element.style.width = width[width.length-1] == '%' ? (width) : (width+'px');
@@ -393,7 +447,7 @@ editableNote.focusOutDropdownFontFamily = function () {
 	setAttributes(el[0], {'class': 'dropdown-font-family'})
 }
 function setAttributes(el, attrs) {
-	for(var key in attrs) {
+	for (var key in attrs) {
 		el.setAttribute(key, attrs[key]);
 	}
 }

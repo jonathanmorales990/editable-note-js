@@ -71,7 +71,6 @@
 	border-top-left-radius: 0px;
 	border-bottom-right-radius: 2.5px;
 	border-bottom-left-radius: 2.5px;
-	margin-top: 2.5px;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	white-space: normal;
@@ -120,58 +119,6 @@
 	background-color: #e7e7e7;
 	transition: background-color 0.4s linear;
 }
-/*div#editable-note-container div > button.font-family, 
-div#editable-note-container div > button {
-	border-top: solid 1px #cacaca;
-	border-bottom: solid 1px #cacaca;
-}*/
-/*div#editable-note-container button:nth-child(1) {
-	border-left: solid 1px #cacaca;
-	border-top-left-radius: 2.5px;
-	border-bottom-left-radius: 2.5px;
-}
-div#editable-note-container button:nth-child(4) {
-	border-right: solid 1px #cacaca;
-	border-top-right-radius: 2.5px;
-	border-bottom-right-radius: 2.5px;
-	margin-right: 10px;
-}
-div#editable-note-container button:nth-child(5) {
-	border-left: solid 1px #cacaca;
-	border-top-left-radius: 2.5px;
-	border-bottom-left-radius: 2.5px;
-}
-div#editable-note-container button:nth-child(8) {
-	border-right: solid 1px #cacaca;
-	border-top-right-radius: 2.5px;
-	border-bottom-right-radius: 2.5px;
-	margin-right: 10px;
-}
-div#editable-note-container button:nth-child(9) {
-	border-left: solid 1px #cacaca;
-	border-top-left-radius: 2.5px;
-	border-bottom-left-radius: 2.5px;
-}
-div#editable-note-container button:nth-child(12) {
-	border-right: solid 1px #cacaca;
-	border-top-right-radius: 2.5px;
-	border-bottom-right-radius: 2.5px;
-	margin-right: 10px;
-}
-div#editable-note-container button:nth-child(14) {
-	border-left: solid 1px #cacaca;
-	border-top-left-radius: 2.5px;
-	border-bottom-left-radius: 2.5px;
-	position: relative;
-	float: right;
-}
-div#editable-note-container button:nth-child(13) {
-	border-right: solid 1px #cacaca;
-	border-top-right-radius: 2.5px;
-	border-bottom-right-radius: 2.5px;
-	position: relative;
-	float: right;
-}*/
 #editable-note-container > div > button:hover {
 	background-color: #dfdfdf;
 	transition: background-color 0.4s linear;
@@ -185,6 +132,9 @@ div#editable-note-container button:nth-child(13) {
 #editable-note-container > div > button > label {
 	line-height: 28px;
 	display: block;
+}
+#editable-note-container > div {
+	margin-bottom: 2.5px;
 }
 #editable-note-container > div > button.font-family > label {
 	padding: 0px 10px 0px 10px;
