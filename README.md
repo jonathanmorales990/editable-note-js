@@ -39,12 +39,12 @@ Set editor color, need to be a hexadecimal.<br/>
 editableNote.initialize();
 editableNote.setColor('#d0d0d0');
 ```
-Set the fonts size of editor.<br/>
+Set the toolbar fonts size of editor.<br/>
 ```
 editableNote.fontSizes = ['10', '12', '13'];
 editableNote.initialize();
 ```
-Set the fonts family of editor.<br/>
+Set the toolbar fonts family of editor.<br/>
 ```
 editableNote.fontFamily = ['serif','Helvetica','Arial'];
 editableNote.initialize();
