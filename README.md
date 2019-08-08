@@ -34,25 +34,28 @@ Set size of editable note in pixel.<br/>
 ```
 editableNote.initialize(600, 300);
 ```
-Set Color, need to be a hexadecimal.<br/>
+Set editor color, need to be a hexadecimal.<br/>
 ```
-    editableNote.initialize();
-    editableNote.setColor('#d0d0d0');
+editableNote.initialize();
+editableNote.setColor('#d0d0d0');
 ```
 Set the fonts size of editor.<br/>
 ```
-    editableNote.fontSizes = ['10', '12', '13'];
-    editableNote.initialize();
+editableNote.fontSizes = ['10', '12', '13'];
+editableNote.initialize();
 ```
 Set the fonts family of editor.<br/>
 ```
-    editableNote.fontFamily = ['serif','Helvetica','Arial'];
-    editableNote.initialize();
+editableNote.fontFamily = ['serif','Helvetica','Arial'];
+editableNote.initialize();
 ```
 Set the toolbar of editor.<br/>
 ```
-    editableNote.toolbar = ['bold','underline','italic','eraser'];
-    editableNote.initialize();
+editableNote.toolbar = ['bold','underline','italic','eraser'];
+editableNote.initialize();
 ```
-
+Get the html.<br/>
+```
+editableNote.getHTML()
+```
 **On the code have a complete example.**
