@@ -9,8 +9,10 @@ Clone or download the editable note from github and include the script and css o
     <link rel="stylesheet" type="text/css" href="dist/editable-note.css"/>
 </head>
 ```
-<br/>
 Create a element html div with identification name of editable-note.<br/>
-``` <div id="editable-note"></div> ```<br/>
+```
+<div id="editable-note"></div>
+```
+<br/>
 Inicialize the editable note.<br/>
 ``` editableNote.initialize();```<br/>
