@@ -2,7 +2,7 @@
 WYSIWYG Editor, made with pure javascript, doesn't need to use Jquery, a library or a framework.
 
 ## **How to use**<br/>
-Clone or download the editable note from github and include the script and css on the head, you need to use fontawesome too for the icons.<br/> 
+Clone or download the editable note from github and include the script and css on the head, you need to use font awesome too for the icons.<br/> 
 ```
 <head>
     <script type="text/javascript" src="dist/editable-note.js"></script>
@@ -19,14 +19,10 @@ Inicialize the editable note.<br/>
 ``` 
 editableNote.initialize();
 ```
-<br/>
 Set size of editable note in percent.<br/>
 ``` 
 editableNote.initialize('100%', '100%');
 ```
-<br/>
 Set size of editable note in pixel.<br/>
-``` 
-editableNote.initialize('600', '300');
 ```
-<br/>
+editableNote.initialize('600', '300');```
