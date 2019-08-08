@@ -23,5 +23,5 @@ Set size of editable note in percent.<br/>
 editableNote.initialize('100%', '100%');
 ```
 Set size of editable note in pixel.<br/>
-```
-editableNote.initialize('600', '300');```
+```editableNote.initialize(600, 300);```
+
