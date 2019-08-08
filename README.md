@@ -16,7 +16,15 @@ Create a element html div with identification name of editable-note.<br/>
 ```
 Inicialize the editable note.<br/>
 ```
-editableNote.initialize();
+document.addEventListener("DOMContentLoaded", function (event) {
+    editableNote.initialize();
+});
+```
+With Jquery.<br/>
+```
+$( document ).ready(function() {
+    editableNote.initialize();
+});
 ```
 Set size of editable note in percent.<br/>
 ``` 
