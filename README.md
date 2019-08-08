@@ -16,7 +16,7 @@ Create a element html div with identification name of editable-note.<br/>
 ```
 <br/>
 Inicialize the editable note.<br/>
-``` 
+```
 editableNote.initialize();
 ```
 Set size of editable note in percent.<br/>
