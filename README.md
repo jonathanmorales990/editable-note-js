@@ -14,10 +14,10 @@ Create a element html div with identification name of editable-note.<br/>
 ```
 <div id="editable-note"></div>
 ```
-<br/>
 Inicialize the editable note.<br/>
-```editableNote.initialize();```
-
+```
+editableNote.initialize();
+```
 Set size of editable note in percent.<br/>
 ``` 
 editableNote.initialize('100%', '100%');
