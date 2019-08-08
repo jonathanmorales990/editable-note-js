@@ -73,6 +73,8 @@
 	border-bottom-left-radius: 2.5px;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
+	border-radius: 4px;
+	margin-top: 2.5px;
 	white-space: normal;
 	min-width: 400px;
 	overflow: hidden;
@@ -133,7 +135,7 @@
 	line-height: 28px;
 	display: block;
 }
-#editable-note-container > div {
+#editable-note-container > div :not(#editable-note) {
 	margin-bottom: 2.5px;
 }
 #editable-note-container > div > button.font-family > label {
@@ -142,6 +144,10 @@
 	width: auto !important;
 	min-width: 40px;
 	line-height: 30px;
+}
+#editable-note-container > .container-button.undo-redo {
+	position: relative;
+	float: right;
 }
 #editable-note-container > div > button, #editable-note-container  > div > button > label {
 	cursor: pointer;

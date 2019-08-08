@@ -72,7 +72,7 @@ editableNote.insertButtonBorders = function () {
 			item.style.borderRight = 'solid 1px #cacaca';
 			item.style.borderTopRightRadius = '2.5px';
 			item.style.borderBottomRightRadius = '2.5px';
-			item.style.marginRight = '10px';
+			item.style.marginRight = '5px';
 		}
 	});
 	this.containerFonts.childNodes.forEach(function(item, index, array){
@@ -87,7 +87,7 @@ editableNote.insertButtonBorders = function () {
 			item.style.borderRight = 'solid 1px #cacaca';
 			item.style.borderTopRightRadius = '2.5px';
 			item.style.borderBottomRightRadius = '2.5px';
-			item.style.marginRight = '10px';
+			item.style.marginRight = '5px';
 		}
 	});
 	this.containerAlign.childNodes.forEach(function(item, index, array){
@@ -102,7 +102,7 @@ editableNote.insertButtonBorders = function () {
 			item.style.borderRight = 'solid 1px #cacaca';
 			item.style.borderTopRightRadius = '2.5px';
 			item.style.borderBottomRightRadius = '2.5px';
-			item.style.marginRight = '10px';
+			item.style.marginRight = '5px';
 		}
 	});
 	this.containerUndoRedo.childNodes.forEach(function(item, index, array){
@@ -121,7 +121,7 @@ editableNote.insertButtonBorders = function () {
 	});
 }
 editableNote.insertContainerButtonEditableNote = function () {
-	var types = ['general', 'fonts', 'align', 'undo-redo'];
+	var types = ['undo-redo', 'general', 'fonts', 'align'];
 	for (var key in types) {
 		var container = document.createElement('div');
 		setAttributes(container, {'class': 'container-button '+types[key]});
@@ -445,6 +445,53 @@ editableNote.toggleDropdownFontFamily = function () {
 editableNote.focusOutDropdownFontFamily = function () {
 	var el = document.getElementsByClassName('dropdown-font-family');
 	setAttributes(el[0], {'class': 'dropdown-font-family'})
+}
+editableNote.getHTML = function () {
+	return this.element.innerHTML;
+}
+editableNote.setColor = function (color) {
+	NodeList.prototype.forEach = Array.prototype.forEach
+	this.container.style.backgroundColor = color;
+	this.containerGeneral.childNodes.forEach(function(item, index, array) {
+		item.style.backgroundColor = color;
+		item.style.borderColor = shade(color, -0.1);
+		item.onmouseover = function() {
+			this.style.backgroundColor = shade(color, 0.20);
+		}
+		item.onmouseleave = function() {
+			this.style.backgroundColor = color;
+		}
+	});
+	this.containerFonts.childNodes.forEach(function(item, index, array) {
+		item.style.backgroundColor = color;
+		item.style.borderColor = shade(color, -0.1);
+		item.onmouseover = function() {
+			this.style.backgroundColor = shade(color, 0.20);
+		}
+		item.onmouseleave = function() {
+			this.style.backgroundColor = color;
+		}
+	});
+	this.containerAlign.childNodes.forEach(function(item, index, array) {
+		item.style.backgroundColor = color;
+		item.style.borderColor = shade(color, -0.1);
+		item.onmouseover = function() {
+			this.style.backgroundColor = shade(color, 0.20);
+		}
+		item.onmouseleave = function() {
+			this.style.backgroundColor = color;
+		}
+	});
+	this.containerUndoRedo.childNodes.forEach(function(item, index, array) {
+		item.style.backgroundColor = color;
+		item.style.borderColor = shade(color, -0.1);
+		item.onmouseover = function() {
+			this.style.backgroundColor = shade(color, 0.20);
+		}
+		item.onmouseleave = function() {
+			this.style.backgroundColor = color;
+		}
+	});
 }
 function setAttributes(el, attrs) {
 	for (var key in attrs) {
