@@ -56,6 +56,6 @@ editableNote.initialize();
 ```
 Get the html.<br/>
 ```
-editableNote.getHTML()
+editableNote.getHTML();
 ```
 **On the code have a complete example.**
