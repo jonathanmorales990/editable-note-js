@@ -1,10 +1,12 @@
 editableNote = {
 	element: null,
 	container: null,
-	containerGeneral: null,
-	containerFonts: null,
-	containerAlign: null,
-	containerUndoRedo: null,
+	containerButtons: {
+		general: null,
+		font: null,
+		align: null,
+		undoRedo: null
+	},
 	fontBackgroundColor: '#ffffff',
 	fontColor: '#000000',
 	toolbar: [
@@ -20,8 +22,8 @@ editableNote = {
 		'align-left',
 		'align-center',
 		'align-right',
-		'redo',
 		'undo',
+		'redo'
 	],
 	fontFamily: [
 		'serif',
@@ -36,13 +38,13 @@ editableNote = {
 	],
 	fontSizes: ['8','9','10','11','12','14','16','18','24','30','36','40','48']
 }
-editableNote.initialize = function (width = 900, height = 300) {
+editableNote.initialize = function (width = 600, height = 300) {
 	this.element = document.getElementById('editable-note');
+	this.element.contentEditable = 'true';
+	this.element.addEventListener('keydown', this.onChangeText, false);
 	this.insertContainerEditableNote();
 	this.insertContainerButtonEditableNote();
 	this.setSize(width, height);
-	this.element.contentEditable = 'true';
-	this.element.addEventListener('keydown', this.onChangeText, false);
 	for (var key in this.toolbar) {
 		this.insertButton(this.toolbar[key]);
 	}
@@ -59,66 +61,24 @@ editableNote.insertParagraph = function () {
 	this.insertNode('p','class','paragraph');
 }
 editableNote.insertButtonBorders = function () {
-	NodeList.prototype.forEach = Array.prototype.forEach
-	this.containerGeneral.childNodes.forEach(function(item, index, array){
-		item.style.borderTop = 'solid 1px #cacaca';
-		item.style.borderBottom = 'solid 1px #cacaca';
-		if (index === 0) {
-			item.style.borderLeft = 'solid 1px #cacaca';
-			item.style.borderTopLeftRadius = '2.5px';
-			item.style.borderBottomLeftRadius = '2.5px';
-		}
-		if (index === (array.length-1)) {
-			item.style.borderRight = 'solid 1px #cacaca';
-			item.style.borderTopRightRadius = '2.5px';
-			item.style.borderBottomRightRadius = '2.5px';
-			item.style.marginRight = '5px';
-		}
-	});
-	this.containerFonts.childNodes.forEach(function(item, index, array){
-		item.style.borderTop = 'solid 1px #cacaca';
-		item.style.borderBottom = 'solid 1px #cacaca';
-		if (index === 0) {
-			item.style.borderLeft = 'solid 1px #cacaca';
-			item.style.borderTopLeftRadius = '2.5px';
-			item.style.borderBottomLeftRadius = '2.5px';
-		}
-		if (index === (array.length-1)) {
-			item.style.borderRight = 'solid 1px #cacaca';
-			item.style.borderTopRightRadius = '2.5px';
-			item.style.borderBottomRightRadius = '2.5px';
-			item.style.marginRight = '5px';
-		}
-	});
-	this.containerAlign.childNodes.forEach(function(item, index, array){
-		item.style.borderTop = 'solid 1px #cacaca';
-		item.style.borderBottom = 'solid 1px #cacaca';
-		if (index === 0) {
-			item.style.borderLeft = 'solid 1px #cacaca';
-			item.style.borderTopLeftRadius = '2.5px';
-			item.style.borderBottomLeftRadius = '2.5px';
-		}
-		if (index === (array.length-1)) {
-			item.style.borderRight = 'solid 1px #cacaca';
-			item.style.borderTopRightRadius = '2.5px';
-			item.style.borderBottomRightRadius = '2.5px';
-			item.style.marginRight = '5px';
-		}
-	});
-	this.containerUndoRedo.childNodes.forEach(function(item, index, array){
-		item.style.borderTop = 'solid 1px #cacaca';
-		item.style.borderBottom = 'solid 1px #cacaca';
-		if (index === 0) {
-			item.style.borderLeft = 'solid 1px #cacaca';
-			item.style.borderTopLeftRadius = '2.5px';
-			item.style.borderBottomLeftRadius = '2.5px';
-		}
-		if (index === (array.length-1)) {
-			item.style.borderRight = 'solid 1px #cacaca';
-			item.style.borderTopRightRadius = '2.5px';
-			item.style.borderBottomRightRadius = '2.5px';
-		}
-	});
+	NodeList.prototype.forEach = Array.prototype.forEach;
+	for (var key in this.containerButtons) {
+		this.containerButtons[key].childNodes.forEach(function(item, index, array){
+			item.style.borderTop = 'solid 1px #cacaca';
+			item.style.borderBottom = 'solid 1px #cacaca';
+			if (index === 0) {
+				item.style.borderLeft = 'solid 1px #cacaca';
+				item.style.borderTopLeftRadius = '2.5px';
+				item.style.borderBottomLeftRadius = '2.5px';
+			}
+			if (index === (array.length-1)) {
+				item.style.borderRight = 'solid 1px #cacaca';
+				item.style.borderTopRightRadius = '2.5px';
+				item.style.borderBottomRightRadius = '2.5px';
+				key != 'undoRedo' && (item.style.marginRight = '5px')
+			}
+		});
+	}
 }
 editableNote.insertContainerButtonEditableNote = function () {
 	var types = ['undo-redo', 'general', 'fonts', 'align'];
@@ -126,36 +86,38 @@ editableNote.insertContainerButtonEditableNote = function () {
 		var container = document.createElement('div');
 		setAttributes(container, {'class': 'container-button '+types[key]});
 		this.container.insertBefore(container, this.element);
-		types[key] == 'general' && (this.containerGeneral = container)
-		types[key] == 'fonts' && (this.containerFonts = container)
-		types[key] == 'align' && (this.containerAlign = container)
-		types[key] == 'undo-redo' && (this.containerUndoRedo = container)
+		types[key] == 'general' && (this.containerButtons.general = container )
+		types[key] == 'fonts' && (this.containerButtons.font = container )
+		types[key] == 'align' && (this.containerButtons.align = container )
+		types[key] == 'undo-redo' && (this.containerButtons.undoRedo = container )
 	}
 }
 editableNote.insertContainerEditableNote = function () {
 	var parent = this.element.parentNode;
 	var wrapper = document.createElement('div');
-	var attr = document.createAttribute('id');
-	attr.value = 'editable-note-container';
-	wrapper.setAttributeNode(attr);
+	setAttributes(wrapper, {'id': 'editable-note-container'});
 	parent.replaceChild(wrapper, this.element);
 	wrapper.appendChild(this.element);
 	this.container = wrapper;
 }
 editableNote.insertNode = function (elementType, attributeName = '', attributeValue = '') {
 	var node = document.createElement(elementType);
-	var attr = document.createAttribute(attributeName);
-	attr.value = attributeValue;
-	node.setAttributeNode(attr);
+	var attr = {};
+	attr[attributeName] = attributeValue;
+	setAttributes(node, attr);
 	this.element.appendChild(node);
 }
 editableNote.setEventFontFamily = function (event, label, dropdown) {
+	if (event.target.classList[0] == 'dropdown-font-family') 
+		return false;
 	label.style.fontFamily = event.target.textContent;
 	label.textContent = event.target.textContent;
 	label.appendChild(dropdown);
 	document.execCommand('fontName', false, event.target.textContent);
 }
 editableNote.setEventFontSize = function (event) {
+	if (event.target.classList[0] == 'dropdown-font-size') 
+		return false;
 	document.execCommand('fontSize', false, '7');
 	var fontElements = document.getElementsByTagName('font');
 	if (fontElements) {
@@ -173,77 +135,54 @@ editableNote.insertButton = function (elementType) {
 	var input = document.createElement('input');
 	var icon = document.createElement('i');
 	var dropdown = document.createElement('div');
-	var triangleButton = document.createElement('div');
-	var fontSizeList = document.createElement('span');
-	var attr;
+	var paletteColor = document.createElement('div');
+	var list = document.createElement('span');
 
 	switch (elementType) {
 		case 'underline':
-			attr = document.createAttribute('class');
-			attr.value = 'editable-note-button fa fa-'+elementType;
-			node.setAttributeNode(attr);
+			setAttributes(node, {'class': 'editable-note-button fa fa-'+elementType});
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'underline';
-			this.containerGeneral.appendChild(node);
+			this.containerButtons.general.appendChild(node);
 			break;
 		case 'bold':
-			attr = document.createAttribute('class');
-			attr.value = 'editable-note-button fa fa-'+elementType;
-			node.setAttributeNode(attr);
+			setAttributes(node, {'class': 'editable-note-button fa fa-'+elementType});
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'bold';
-			this.containerGeneral.appendChild(node);
+			this.containerButtons.general.appendChild(node);
 			break;
 		case 'italic':
-			attr = document.createAttribute('class');
-			attr.value = 'editable-note-button fa fa-'+elementType;
-			node.setAttributeNode(attr);
+			setAttributes(node, {'class': 'editable-note-button fa fa-'+elementType});
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'italic';
-			this.containerGeneral.appendChild(node);
+			this.containerButtons.general.appendChild(node);
 			break;
 		case 'font-size':
-			attr = document.createAttribute('class');
-			attr.value = 'editable-note-button font-size fa';
-			node.setAttributeNode(attr);
-			label.style.width = '100%';
-			label.style.height = '100%';
-			label.style.position = 'relative';
-			attr = document.createAttribute('class');
-			attr.value = 'fa fa-font';
-			icon.setAttributeNode(attr);
-			label.appendChild(icon);
+			setAttributes(node, {'class': 'editable-note-button font-size fa'});
+			setAttributes(icon, {'class': 'fa fa-font'});
+			setAttributes(dropdown, {'class': 'dropdown-font-size'});
 			iconClone = icon.cloneNode(true);
 			iconClone.style.fontSize = '9px';
-			attr = document.createAttribute('class');
-			attr.value = 'dropdown-font-size';
-			dropdown.setAttributeNode(attr);
 			for(var key in this.fontSizes) {
-				fontSizeList.textContent = this.fontSizes[key];
-				dropdown.appendChild(fontSizeList.cloneNode(true));
+				list.textContent = this.fontSizes[key];
+				dropdown.appendChild(list.cloneNode(true));
 			}
+			label.appendChild(icon);
 			label.appendChild(dropdown);
 			label.appendChild(iconClone);
 			node.appendChild(label);
 			dropdown.addEventListener('click', this.setEventFontSize, false);
 			node.addEventListener('click', this.toggleDropdownFontSize, false);
 			node.addEventListener('focusout', this.focusOutDropdownFontSize, false);
-			this.containerFonts.appendChild(node);
+			this.containerButtons.font.appendChild(node);
 			break;
 		case 'font-family':
-			attr = document.createAttribute('class');
-			attr.value = 'editable-note-button font-family fa';
-			node.setAttributeNode(attr);
-			label.style.width = '100%';
-			label.style.height = '100%';
-			label.style.position = 'relative';
-			attr = document.createAttribute('class');
-			attr.value = 'dropdown-font-family';
-			dropdown.setAttributeNode(attr);
+			setAttributes(node, {'class': 'editable-note-button font-family fa'});
+			setAttributes(dropdown, {'class': 'dropdown-font-family'});
 			for(var key in this.fontFamily) {
-				fontSizeList.textContent = this.fontFamily[key];
-				fontSizeList.style.fontFamily = this.fontFamily[key];
-				dropdown.appendChild(fontSizeList.cloneNode(true));
+				list.textContent = this.fontFamily[key];
+				list.style.fontFamily = this.fontFamily[key];
+				dropdown.appendChild(list.cloneNode(true));
 			}
 			label.style.fontFamily = this.fontFamily[0];
 			label.textContent = this.fontFamily[0];
@@ -255,27 +194,15 @@ editableNote.insertButton = function (elementType) {
 			}, false);
 			node.addEventListener('click', this.toggleDropdownFontFamily, false);
 			node.addEventListener('focusout', this.focusOutDropdownFontFamily, false);
-			this.containerFonts.appendChild(node);
+			this.containerButtons.font.appendChild(node);
 			break;
 		case 'font-color':
-			attr = document.createAttribute('class');
-			attr.value = 'editable-note-button fa';
-			node.setAttributeNode(attr);
-			label.style.width = '100%';
-			label.style.height = '100%';
-			input.style.display = 'none';
-			attr = document.createAttribute('class');
-			attr.value = 'fa fa-font';
-			icon.setAttributeNode(attr);
-			attr = document.createAttribute('class');
-			attr.value = 'font-triangle-button';
-			triangleButton.setAttributeNode(attr);
-			attr = document.createAttribute('type');
-			attr.value = 'color';
-			input.setAttributeNode(attr);
-			label.style.position = 'relative';
+			setAttributes(node, {'class': 'editable-note-button fa'});
+			setAttributes(icon, {'class': 'fa fa-font'});
+			setAttributes(paletteColor, {'class': 'open-color-palette'});
+			setAttributes(input, {'type': 'color'});
 			label.appendChild(icon);
-			label.appendChild(triangleButton);
+			label.appendChild(paletteColor);
 			label.appendChild(input);
 			node.appendChild(label);
 			input.addEventListener('change', function (event) {
@@ -294,32 +221,20 @@ editableNote.insertButton = function (elementType) {
 					event.preventDefault();
 				}
 			});
-			triangleButton.addEventListener('click', function (event) {
+			paletteColor.addEventListener('click', function (event) {
 				event.stopPropagation();
 			});
-			this.containerFonts.appendChild(node);
+			this.containerButtons.font.appendChild(node);
 			break;
 		case 'background-font-color':
-			attr = document.createAttribute('class');
-			attr.value = 'editable-note-button fa';
-			node.setAttributeNode(attr);
-			label.style.width = '100%';
-			label.style.height = '100%';
+			setAttributes(node, {'class': 'editable-note-button fa'});
+			setAttributes(icon, {'class': 'fa fa-font'});
+			setAttributes(paletteColor, {'class': 'open-color-palette'});
+			setAttributes(input, {'type': 'color'});
 			icon.style.backgroundColor = 'white';
-			input.style.display = 'none';
-			attr = document.createAttribute('class');
-			attr.value = 'fa fa-font';
-			icon.setAttributeNode(attr);
 			icon.style.padding = '3px 5px 3px 5px';
-			attr = document.createAttribute('class');
-			attr.value = 'font-triangle-button';
-			triangleButton.setAttributeNode(attr);
-			attr = document.createAttribute('type');
-			attr.value = 'color';
-			input.setAttributeNode(attr);
-			label.style.position = 'relative';
 			label.appendChild(icon);
-			label.appendChild(triangleButton);
+			label.appendChild(paletteColor);
 			label.appendChild(input);
 			node.appendChild(label);
 			input.addEventListener('change', function (event) {
@@ -338,68 +253,53 @@ editableNote.insertButton = function (elementType) {
 					editableNote.setEventType(event);
 				}
 			});
-			triangleButton.addEventListener('click', function (event) {
+			paletteColor.addEventListener('click', function (event) {
 				event.stopPropagation();
 			});
-			this.containerFonts.appendChild(node);
+			this.containerButtons.font.appendChild(node);
 			break;
 		case 'align-left':
-			attr = document.createAttribute('class');
-			attr.value = 'editable-note-button fa fa-'+elementType;
-			node.setAttributeNode(attr);
+			setAttributes(node, {'class': 'editable-note-button fa fa-'+elementType});
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'justifyLeft';
-			this.containerAlign.appendChild(node);
+			this.containerButtons.align.appendChild(node);
 			break;
 		case 'align-center':
-			attr = document.createAttribute('class');
-			attr.value = 'editable-note-button fa fa-'+elementType;
-			node.setAttributeNode(attr);
+			setAttributes(node, {'class': 'editable-note-button fa fa-'+elementType});
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'justifyCenter';
-			this.containerAlign.appendChild(node);
+			this.containerButtons.align.appendChild(node);
 			break;
 		case 'align-right':
-			attr = document.createAttribute('class');
-			attr.value = 'editable-note-button fa fa-'+elementType;
-			node.setAttributeNode(attr);
+			setAttributes(node, {'class': 'editable-note-button fa fa-'+elementType});
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'justifyRight';
-			this.containerAlign.appendChild(node);
+			this.containerButtons.align.appendChild(node);
 			break;
 		case 'align-justify':
-			attr = document.createAttribute('class');
-			attr.value = 'editable-note-button fa fa-'+elementType;
-			node.setAttributeNode(attr);
+			setAttributes(node, {'class': 'editable-note-button fa fa-'+elementType});
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'justifyFull';
-			this.containerAlign.appendChild(node);
+			this.containerButtons.align.appendChild(node);
 			break;
 		case 'redo':
-			attr = document.createAttribute('class');
-			attr.value = 'editable-note-button fa fa-'+elementType+'-alt';
-			node.setAttributeNode(attr);
+			setAttributes(node, {'class': 'editable-note-button fa fa-'+elementType});
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'redo';
-			this.containerUndoRedo.appendChild(node);
+			this.containerButtons.undoRedo.appendChild(node);
 			break;
 		case 'undo':
-			attr = document.createAttribute('class');
-			attr.value = 'editable-note-button fa fa-'+elementType+'-alt';
-			node.setAttributeNode(attr);
+			setAttributes(node, {'class': 'editable-note-button fa fa-'+elementType});
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'undo';
-			this.containerUndoRedo.appendChild(node);
+			this.containerButtons.undoRedo.appendChild(node);
 			break;
 		case 'eraser':
-			attr = document.createAttribute('class');
-			attr.value = 'editable-note-button fa fa-'+elementType;
-			node.setAttributeNode(attr);
+			setAttributes(node, {'class': 'editable-note-button fa fa-'+elementType});
 			node.addEventListener('click', this.setEventType, false);
 			node.eventType = 'removeFormat';
-			this.containerGeneral.appendChild(node);
+			this.containerButtons.general.appendChild(node);
 			break;
-
 	}
 }
 editableNote.setSize = function (width, height) {
@@ -450,48 +350,20 @@ editableNote.getHTML = function () {
 	return this.element.innerHTML;
 }
 editableNote.setColor = function (color) {
-	NodeList.prototype.forEach = Array.prototype.forEach
+	NodeList.prototype.forEach = Array.prototype.forEach;
 	this.container.style.backgroundColor = color;
-	this.containerGeneral.childNodes.forEach(function(item, index, array) {
-		item.style.backgroundColor = color;
-		item.style.borderColor = shade(color, -0.1);
-		item.onmouseover = function() {
-			this.style.backgroundColor = shade(color, 0.20);
-		}
-		item.onmouseleave = function() {
-			this.style.backgroundColor = color;
-		}
-	});
-	this.containerFonts.childNodes.forEach(function(item, index, array) {
-		item.style.backgroundColor = color;
-		item.style.borderColor = shade(color, -0.1);
-		item.onmouseover = function() {
-			this.style.backgroundColor = shade(color, 0.20);
-		}
-		item.onmouseleave = function() {
-			this.style.backgroundColor = color;
-		}
-	});
-	this.containerAlign.childNodes.forEach(function(item, index, array) {
-		item.style.backgroundColor = color;
-		item.style.borderColor = shade(color, -0.1);
-		item.onmouseover = function() {
-			this.style.backgroundColor = shade(color, 0.20);
-		}
-		item.onmouseleave = function() {
-			this.style.backgroundColor = color;
-		}
-	});
-	this.containerUndoRedo.childNodes.forEach(function(item, index, array) {
-		item.style.backgroundColor = color;
-		item.style.borderColor = shade(color, -0.1);
-		item.onmouseover = function() {
-			this.style.backgroundColor = shade(color, 0.20);
-		}
-		item.onmouseleave = function() {
-			this.style.backgroundColor = color;
-		}
-	});
+	for (var key in this.containerButtons) {
+		this.containerButtons[key].childNodes.forEach(function(item, index, array){
+			item.style.backgroundColor = shade(color, 0.25);
+			item.style.borderColor = shade(color, -0.1);
+			item.onmouseover = function() {
+				this.style.backgroundColor = shade(color, 0.15);
+			}
+			item.onmouseleave = function() {
+				this.style.backgroundColor = shade(color, 0.25);
+			}
+		});
+	}
 }
 function setAttributes(el, attrs) {
 	for (var key in attrs) {
