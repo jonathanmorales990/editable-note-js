@@ -8,7 +8,7 @@ editableNote = {
 		undoRedo: null,
 		fontFamily: null
 	},
-	fontBackgroundColor: '#ffffff',
+	fontBackgroundColor: '#fcff43',
 	fontColor: '#000000',
 	toolbar: [
 		'bold',
@@ -234,7 +234,7 @@ editableNote.insertButton = function (elementType) {
 			setAttributes(icon, {'class': 'fa fa-font'});
 			setAttributes(paletteColor, {'class': 'open-color-palette'});
 			setAttributes(input, {'type': 'color'});
-			icon.style.backgroundColor = 'white';
+			icon.style.backgroundColor = '#fcff43';
 			icon.style.padding = '3px 5px 3px 5px';
 			label.appendChild(icon);
 			label.appendChild(paletteColor);
@@ -357,19 +357,19 @@ editableNote.setColor = function (color) {
 	this.container.style.backgroundColor = color;
 	for (var key in this.containerButtons) {
 		this.containerButtons[key].childNodes.forEach(function(item, index, array){
-			item.style.backgroundColor = shade(color, 0.5);
+			item.style.backgroundColor = shade(color, 1);
 			item.style.borderColor = shade(color, -0.1);
 			item.onmouseover = function() {
-				this.style.backgroundColor = shade(color, 0.05);
+				this.style.backgroundColor = shade(color, 0.5);
 			}
 			item.onmouseleave = function() {
-				this.style.backgroundColor = shade(color, 0.5);
+				this.style.backgroundColor = shade(color, 1);
 			}
-			item.click = function () {
-				this.style.backgroundColor = shade(color, 0.05);
+			item.onclick = function () {
+				this.style.backgroundColor = shade(color, 0.5);
 			}
 			item.onblur = function () {
-				this.style.backgroundColor = shade(color, 0.5);
+				this.style.backgroundColor = shade(color, 1);
 			}
 		});
 	}
