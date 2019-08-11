@@ -3,9 +3,10 @@ editableNote = {
 	container: null,
 	containerButtons: {
 		general: null,
-		font: null,
+		fontStyle: null,
 		align: null,
-		undoRedo: null
+		undoRedo: null,
+		fontFamily: null
 	},
 	fontBackgroundColor: '#ffffff',
 	fontColor: '#000000',
@@ -26,9 +27,9 @@ editableNote = {
 		'redo'
 	],
 	fontFamily: [
-		'serif',
-		'Helvetica',
 		'Arial',
+		'Helvetica',
+		'serif',
 		'Arial Black',
 		'Impact',
 		'cursive',
@@ -50,6 +51,7 @@ editableNote.initialize = function (width = 600, height = 300) {
 	}
 	this.insertParagraph();
 	this.insertButtonBorders();
+	this.setColor('#f5f5f5');
 }
 editableNote.onChangeText = function (event) {
 	if (event.keyCode == 8 || event.keyCode ==  46)
@@ -81,15 +83,16 @@ editableNote.insertButtonBorders = function () {
 	}
 }
 editableNote.insertContainerButtonEditableNote = function () {
-	var types = ['undo-redo', 'general', 'fonts', 'align'];
+	var types = ['undo-redo', 'general', 'font-family', 'font-style', 'align'];
 	for (var key in types) {
 		var container = document.createElement('div');
 		setAttributes(container, {'class': 'container-button '+types[key]});
 		this.container.insertBefore(container, this.element);
-		types[key] == 'general' && (this.containerButtons.general = container )
-		types[key] == 'fonts' && (this.containerButtons.font = container )
-		types[key] == 'align' && (this.containerButtons.align = container )
-		types[key] == 'undo-redo' && (this.containerButtons.undoRedo = container )
+		types[key] == 'general' && (this.containerButtons.general = container)
+		types[key] == 'font-style' && (this.containerButtons.fontStyle = container)
+		types[key] == 'align' && (this.containerButtons.align = container)
+		types[key] == 'undo-redo' && (this.containerButtons.undoRedo = container)
+		types[key] == 'font-family' && (this.containerButtons.fontFamily = container)
 	}
 }
 editableNote.insertContainerEditableNote = function () {
@@ -174,7 +177,7 @@ editableNote.insertButton = function (elementType) {
 			dropdown.addEventListener('click', this.setEventFontSize, false);
 			node.addEventListener('click', this.toggleDropdownFontSize, false);
 			node.addEventListener('focusout', this.focusOutDropdownFontSize, false);
-			this.containerButtons.font.appendChild(node);
+			this.containerButtons.fontStyle.appendChild(node);
 			break;
 		case 'font-family':
 			setAttributes(node, {'class': 'editable-note-button font-family fa'});
@@ -194,7 +197,7 @@ editableNote.insertButton = function (elementType) {
 			}, false);
 			node.addEventListener('click', this.toggleDropdownFontFamily, false);
 			node.addEventListener('focusout', this.focusOutDropdownFontFamily, false);
-			this.containerButtons.font.appendChild(node);
+			this.containerButtons.fontFamily.appendChild(node);
 			break;
 		case 'font-color':
 			setAttributes(node, {'class': 'editable-note-button fa'});
@@ -224,7 +227,7 @@ editableNote.insertButton = function (elementType) {
 			paletteColor.addEventListener('click', function (event) {
 				event.stopPropagation();
 			});
-			this.containerButtons.font.appendChild(node);
+			this.containerButtons.fontStyle.appendChild(node);
 			break;
 		case 'background-font-color':
 			setAttributes(node, {'class': 'editable-note-button fa'});
@@ -256,7 +259,7 @@ editableNote.insertButton = function (elementType) {
 			paletteColor.addEventListener('click', function (event) {
 				event.stopPropagation();
 			});
-			this.containerButtons.font.appendChild(node);
+			this.containerButtons.fontStyle.appendChild(node);
 			break;
 		case 'align-left':
 			setAttributes(node, {'class': 'editable-note-button fa fa-'+elementType});
@@ -354,13 +357,19 @@ editableNote.setColor = function (color) {
 	this.container.style.backgroundColor = color;
 	for (var key in this.containerButtons) {
 		this.containerButtons[key].childNodes.forEach(function(item, index, array){
-			item.style.backgroundColor = shade(color, 0.25);
+			item.style.backgroundColor = shade(color, 0.5);
 			item.style.borderColor = shade(color, -0.1);
 			item.onmouseover = function() {
-				this.style.backgroundColor = shade(color, 0.15);
+				this.style.backgroundColor = shade(color, 0.05);
 			}
 			item.onmouseleave = function() {
-				this.style.backgroundColor = shade(color, 0.25);
+				this.style.backgroundColor = shade(color, 0.5);
+			}
+			item.click = function () {
+				this.style.backgroundColor = shade(color, 0.05);
+			}
+			item.onblur = function () {
+				this.style.backgroundColor = shade(color, 0.5);
 			}
 		});
 	}
