@@ -37,7 +37,8 @@ editableNote.initialize(600, 300);
 Set editor color, need to be a hexadecimal.<br/>
 ```
 editableNote.initialize();
-editableNote.setColor('#d0d0d0');
+editableNote.setPrimaryColor('#ffffff');
+editableNote.setSecundaryColor('#eaeaea');
 ```
 Set the toolbar fonts size of editor.<br/>
 ```
