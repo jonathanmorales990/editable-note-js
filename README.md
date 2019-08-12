@@ -1,5 +1,6 @@
 # editable-note-js
 WYSIWYG Editor, made with pure javascript, doesn't need to use Jquery, a library or a framework.
+##[DEMO](https://codepen.io/jonathanmorales990/pen/bGbbNdK)
 
 ## **How to use**<br/>
 Clone or download the editable note from github and include the script and css on the head, you need to use font awesome too for the icons.<br/> 
@@ -59,4 +60,3 @@ Get the html.<br/>
 ```
 editableNote.getHTML();
 ```
-**On the code have a complete example.**
