@@ -50,6 +50,8 @@ editableNote.initialize = function (width = 600, height = 300) {
 		this.insertButton(this.toolbar[key]);
 	}
 	this.insertParagraph();
+	this.setPrimaryColor('#ffffff'); //default
+	this.setSecundaryColor('#eaeaea');
 }
 editableNote.onChangeText = function (event) {
 	if (event.keyCode == 8 || event.keyCode ==  46)
@@ -287,7 +289,7 @@ editableNote.setSize = function (width, height) {
 	this.element.style.width = width[width.length-1] == '%' ? ('100%') : (width+'px');
 	this.container.style.width = width[width.length-1] == '%' ? ('calc('+width+' - 21px)') : (width+'px');
 	if (height[height.length-1] == '%') {
-		this.container.style.height = '100%';
+		this.container.style.height = height;
 		this.element.style.height = 'calc(100% - 90px)';
 		this.element.style.overflowY = 'scroll';
 	} else {
