@@ -50,8 +50,6 @@ editableNote.initialize = function (width = 600, height = 300) {
 		this.insertButton(this.toolbar[key]);
 	}
 	this.insertParagraph();
-	this.insertButtonBorders();
-	this.setColor('#f5f5f5');
 }
 editableNote.onChangeText = function (event) {
 	if (event.keyCode == 8 || event.keyCode ==  46)
@@ -61,26 +59,6 @@ editableNote.onChangeText = function (event) {
 }
 editableNote.insertParagraph = function () {
 	this.insertNode('p','class','paragraph');
-}
-editableNote.insertButtonBorders = function () {
-	NodeList.prototype.forEach = Array.prototype.forEach;
-	for (var key in this.containerButtons) {
-		this.containerButtons[key].childNodes.forEach(function(item, index, array){
-			item.style.borderTop = 'solid 1px #cacaca';
-			item.style.borderBottom = 'solid 1px #cacaca';
-			if (index === 0) {
-				item.style.borderLeft = 'solid 1px #cacaca';
-				item.style.borderTopLeftRadius = '2.5px';
-				item.style.borderBottomLeftRadius = '2.5px';
-			}
-			if (index === (array.length-1)) {
-				item.style.borderRight = 'solid 1px #cacaca';
-				item.style.borderTopRightRadius = '2.5px';
-				item.style.borderBottomRightRadius = '2.5px';
-				key != 'undoRedo' && (item.style.marginRight = '5px')
-			}
-		});
-	}
 }
 editableNote.insertContainerButtonEditableNote = function () {
 	var types = ['undo-redo', 'general', 'font-family', 'font-style', 'align'];
@@ -306,11 +284,11 @@ editableNote.insertButton = function (elementType) {
 	}
 }
 editableNote.setSize = function (width, height) {
-	this.element.style.width = width[width.length-1] == '%' ? (width) : (width+'px');
-	this.container.style.width = width[width.length-1] == '%' ? (width) : (width+'px');
-	if (height[width.length-1] == '%') {
-		this.container.style.height = '100%'; 
-		this.element.style.height = 'calc(100% - 35px)';
+	this.element.style.width = width[width.length-1] == '%' ? ('100%') : (width+'px');
+	this.container.style.width = width[width.length-1] == '%' ? ('calc('+width+' - 21px)') : (width+'px');
+	if (height[height.length-1] == '%') {
+		this.container.style.height = '100%';
+		this.element.style.height = 'calc(100% - 90px)';
 		this.element.style.overflowY = 'scroll';
 	} else {
 		this.element.style.minHeight = height+'px';
@@ -352,24 +330,47 @@ editableNote.focusOutDropdownFontFamily = function () {
 editableNote.getHTML = function () {
 	return this.element.innerHTML;
 }
-editableNote.setColor = function (color) {
-	NodeList.prototype.forEach = Array.prototype.forEach;
+editableNote.setPrimaryColor = function (color) {
+	this.element.style.backgroundColor = color;
 	this.container.style.backgroundColor = color;
 	for (var key in this.containerButtons) {
+		this.containerButtons[key].childNodes.forEach(function(item){
+			item.style.backgroundColor = color;
+		});
+	}
+}
+editableNote.setSecundaryColor = function (color) {
+	NodeList.prototype.forEach = Array.prototype.forEach;
+	this.element.style.borderTop = 'solid 1px '+shade(color, -0.05);
+	this.container.style.boxShadow = '0px 0px 3px -1px'+shade(color, -0.9);
+	var oldColor = color;
+	color = shade(color, -0.1);
+	for (var key in this.containerButtons) {
+		this.containerButtons[key].style.boxShadow = '1px 1px 2px 0px'+shade(oldColor, -0.2);
+		this.containerButtons[key].style.borderTop = 'solid 1px'+shade(oldColor, -0.05);
+		this.containerButtons[key].style.borderLeft = 'solid 1px'+shade(oldColor, -0.05);
 		this.containerButtons[key].childNodes.forEach(function(item, index, array){
-			item.style.backgroundColor = shade(color, 1);
-			item.style.borderColor = shade(color, -0.1);
+			if (key == 'fontFamily' || key == 'fontStyle') {
+				if (item.childNodes[0].childNodes[1].classList[0] == 'dropdown-font-family') {
+					item.childNodes[0].childNodes[1].style.backgroundColor = shade(color, 1);
+				}
+				if (item.childNodes[0].childNodes[1].classList[0] == 'dropdown-font-size') {
+					item.childNodes[0].childNodes[1].style.backgroundColor = shade(color, 1);
+				}
+				item.childNodes[0].childNodes[1].childNodes.forEach(function(list){
+					list.onmouseover = function() {
+						this.style.backgroundColor = shade(color, 0.6);
+					}
+					list.onmouseleave = function() {
+						this.style.backgroundColor = shade(color, 1);
+					}
+				});
+			}
 			item.onmouseover = function() {
-				this.style.backgroundColor = shade(color, 0.5);
+				this.style.backgroundColor = shade(color, 0.3);
 			}
 			item.onmouseleave = function() {
-				this.style.backgroundColor = shade(color, 1);
-			}
-			item.onclick = function () {
-				this.style.backgroundColor = shade(color, 0.5);
-			}
-			item.onblur = function () {
-				this.style.backgroundColor = shade(color, 1);
+				this.style.backgroundColor = editableNote.container.style.backgroundColor;
 			}
 		});
 	}
