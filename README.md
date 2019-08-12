@@ -1,5 +1,5 @@
 # editable-note-js
-WYSIWYG Editor, made with pure javascript, doesn't need to use a library or a framework.
+WYSIWYG Editor, made with pure javascript.
 <br>[LIVE DEMO.](https://codepen.io/jonathanmorales990/pen/bGbbNdK)
 
 ## **How to use**<br/>
